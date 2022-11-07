@@ -14,6 +14,8 @@ import {
 import { paths } from 'routes/paths';
 import { Flex, Button, Text, HR, Modal } from 'ui';
 
+import HedgeyIntegrationSettings from './HedgeyIntegrationSettings';
+
 export const AdminIntegrations = ({ circleId }: { circleId: number }) => {
   const integrations = useCurrentCircleIntegrations();
   const [deleteIntegration, setDeleteIntegration] =
@@ -178,6 +180,8 @@ export const AdminIntegrations = ({ circleId }: { circleId: number }) => {
           </Button>
         </Flex>
       </Modal>
+      <HR />
+      <HedgeyIntegrationSettings />
     </div>
   );
 };
