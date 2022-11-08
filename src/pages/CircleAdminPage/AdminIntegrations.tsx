@@ -43,6 +43,13 @@ export const AdminIntegrations = ({ circleId }: { circleId: number }) => {
   const wonderIntegrations = integrations?.data?.filter(integration => {
     return integration.type === 'wonder';
   });
+  const hedgeyIntegration = integrations?.data?.find(integration => {
+    return integration.type === 'hedgey';
+  }) as {
+    id: number;
+    type: string;
+    data: { enabled: boolean; lockPeriod: string; transferable: string };
+  };
 
   return (
     <div>
@@ -181,7 +188,10 @@ export const AdminIntegrations = ({ circleId }: { circleId: number }) => {
         </Flex>
       </Modal>
       <HR />
-      <HedgeyIntegrationSettings />
+      <HedgeyIntegrationSettings
+        circleId={circleId}
+        integration={hedgeyIntegration}
+      />
     </div>
   );
 };

@@ -1,6 +1,10 @@
-import { useState } from 'react';
-
+/* eslint-disable */
+import { useEffect, useState } from 'react';
 import { Button, Flex, Modal, Select, SelectOption, Text } from 'ui';
+import {
+  createCircleIntegration,
+  deleteCircleIntegration,
+} from 'lib/gql/mutations';
 
 function HedgeyIntro() {
   return (
@@ -31,27 +35,48 @@ export const hedgeyLockPeriods: SelectOption[] = [
   { label: '48 months', value: '48' },
 ];
 
-export default function HedgeyIntegrationSettings() {
+export default function HedgeyIntegrationSettings(props: {
+  circleId: number;
+  integration: {
+    id: number;
+    type: string;
+    data: { enabled: boolean; lockPeriod: string; transferable: string };
+  };
+}) {
+  const [circleIntegrationId, setCircleIntegrationId] = useState(
+    undefined as number | undefined
+  );
   const [hedgeyEnabled, setHedgeyEnabled] = useState(false);
   const [hedgeyLockPeriod, setHedgeyLockPeriod] = useState('12');
-  const [hedgeyTransferrable, setHedgeyTransferrable] = useState('1');
+  const [hedgeyTransferable, setHedgeyTransferable] = useState('0');
   const [showDisableModal, setShowDisableModal] = useState(false);
 
-  const onSaveHedgeyIntegration = (e: any) => {
+  useEffect(() => {
+    setCircleIntegrationId(props.integration?.id);
+    setHedgeyEnabled(props.integration?.data.enabled || false);
+    setHedgeyLockPeriod(props.integration?.data.lockPeriod || '12');
+    setHedgeyTransferable(props.integration?.data.transferable || '0');
+  }, [props]);
+
+  const onSaveHedgeyIntegration = async (e: any) => {
     e.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log('Save hedgey integration with values:', {
-      hedgeyEnabled,
-      hedgeyLockPeriod,
-      hedgeyTransferrable,
+    if (circleIntegrationId) await deleteCircleIntegration(circleIntegrationId);
+    await createCircleIntegration(props.circleId, 'hedgey', 'Hedgey', {
+      enabled: hedgeyEnabled,
+      lockPeriod: hedgeyLockPeriod,
+      transferable: hedgeyTransferable,
     });
   };
 
-  const onDisableHedgey = () => {
-    // eslint-disable-next-line no-console
-    console.log('make a call to disable in the DB');
+  const onDisableHedgey = async () => {
     setHedgeyEnabled(false);
     setShowDisableModal(false);
+    if (circleIntegrationId) await deleteCircleIntegration(circleIntegrationId);
+    await createCircleIntegration(props.circleId, 'hedgey', 'Hedgey', {
+      enabled: false,
+      lockPeriod: hedgeyLockPeriod,
+      transferable: hedgeyTransferable,
+    });
   };
 
   return (
@@ -116,7 +141,8 @@ export default function HedgeyIntegrationSettings() {
                   { label: 'Yes', value: '1' },
                   { label: 'No', value: '0' },
                 ]}
-                onValueChange={value => setHedgeyTransferrable(value)}
+                value={hedgeyTransferable}
+                onValueChange={value => setHedgeyTransferable(value)}
               />
             </Flex>
             <Button color="primary" outlined onClick={onSaveHedgeyIntegration}>
