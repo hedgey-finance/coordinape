@@ -19,7 +19,17 @@ import { paths } from '../../routes/paths';
 import { IUser } from '../../types';
 import { LoadingModal, FormTokenField, zTokenString } from 'components';
 import { useApeSnackbar, useContracts } from 'hooks';
-import { AppLink, Box, Button, Flex, Panel, Select, Text } from 'ui';
+import { hedgeyLockPeriods } from 'pages/CircleAdminPage/HedgeyIntegrationSettings';
+import {
+  AppLink,
+  Box,
+  Button,
+  Flex,
+  Panel,
+  Select,
+  SelectOption,
+  Text,
+} from 'ui';
 import { TwoColumnLayout } from 'ui/layouts';
 import { makeExplorerUrl } from 'utils/provider';
 
@@ -83,6 +93,7 @@ export function DistributionForm({
   const [maxFixedPaymentTokens, setMaxFixedPaymentTokens] = useState(
     ethersConstants.Zero
   );
+  const [isUsingHedgey, setIsUsingHedgey] = useState(false);
 
   const { showError } = useApeSnackbar();
   const submitDistribution = useSubmitDistribution();
@@ -108,6 +119,9 @@ export function DistributionForm({
       giftDecimals
     ),
     selectedVaultId: z.string(),
+    selectedHedgeyVaultId: z.string().optional(),
+    hedgeyLockPeriod: z.string().optional(),
+    hedgeyTransferable: z.string().optional(),
   });
   const FixedDistributionFormSchema = z.object({
     amount: z.string(),
@@ -126,6 +140,7 @@ export function DistributionForm({
     resolver: zodResolver(DistributionFormSchema),
     defaultValues: {
       selectedVaultId: vaults[0] ? vaults[0].id.toString() : undefined,
+      selectedHedgeyVaultId: vaults[0] ? vaults[0].id.toString() : undefined,
     },
   });
 
@@ -170,6 +185,12 @@ export function DistributionForm({
     if (fpVault)
       updateBalanceState(fpVault.id.toString(), totalFixedPayment, 'fixed');
   }, [fixedPaymentVaultId, totalFixedPayment]);
+
+  useEffect(() => {
+    if (isUsingHedgey) {
+      setGiftVaultId(vaults[0].id.toString());
+    }
+  }, [isUsingHedgey]);
 
   const onFixedFormSubmit: SubmitHandler<TFixedDistributionForm> = async () => {
     assert(epoch?.id && circle);
@@ -257,14 +278,17 @@ export function DistributionForm({
   ) => {
     assert(epoch?.id && circle);
     setGiftSubmitting(true);
-    const vault = findVault(value.selectedVaultId);
+    const vault = findVault(
+      isUsingHedgey ? value.selectedHedgeyVaultId : value.selectedVaultId
+    );
     assert(vault);
 
     const gifts = users.reduce((ret, user) => {
       ret[user.address] = user.received;
       return ret;
     }, {} as Record<string, number>);
-
+    // eslint-disable-next-line no-debugger
+    debugger;
     try {
       const result = await submitDistribution({
         amount: value.amount.toString(),
@@ -333,6 +357,9 @@ export function DistributionForm({
   };
 
   const isCombinedDistribution = () => {
+    if (isUsingHedgey) {
+      return false;
+    }
     return (
       ((fixedDist && circleDist) || (!fixedDist && !circleDist)) &&
       giftVaultId &&
@@ -345,18 +372,27 @@ export function DistributionForm({
     amountSet: string,
     formType: string
   ): Promise<void> => {
+    function calculateIfCombinedDist() {
+      if (isUsingHedgey) {
+        return false;
+      }
+      return (
+        // check if the two symbols are the same
+        ((formType === 'gift' && fpVault?.id.toString() === vaultId) ||
+          (formType === 'fixed' && giftVaultId === vaultId)) &&
+        // check if a non combined distribution is selected
+        ((!fixedDist && !circleDist) || (circleDist && fixedDist))
+      );
+    }
     assert(circle);
     const vault = findVault(vaultId);
     assert(vault);
     const amountSetBN = parseUnits(amountSet || '0', vault.decimals);
     assert(contracts, 'This network is not supported');
     const tokenBalance = await contracts.getVaultBalance(vault);
-    const isCombinedDist =
-      // check if the two symbols are the same
-      ((formType === 'gift' && fpVault?.id.toString() === vaultId) ||
-        (formType === 'fixed' && giftVaultId === vaultId)) &&
-      // check if a non combined distribution is selected
-      ((!fixedDist && !circleDist) || (circleDist && fixedDist));
+
+    const isCombinedDist = calculateIfCombinedDist();
+
     const totalAmt: BigNumber = isCombinedDist
       ? amountSetBN.add(parseUnits(totalFixedPayment, vault.decimals))
       : amountSetBN;
@@ -397,6 +433,59 @@ export function DistributionForm({
     return commify(round(humanNumber, 2));
   };
 
+  const getVaultOptions = (options?: { includeHedgey: boolean }) => {
+    // todo: figure out how to get the hedgey settings and set the default values of the form to use those set in the integration settings
+    const hedgeyEnabled = true;
+    let vaultOptions: SelectOption[] = [];
+    if (vaults.length) {
+      const v = vaults.map(t => {
+        return {
+          value: t.id.toString(),
+          label: options?.includeHedgey
+            ? getVaultSymbolAddressString(t)
+            : `CoVault: ${getVaultSymbolAddressString(t)}`,
+        };
+      });
+      vaultOptions = options?.includeHedgey
+        ? v
+        : [...v, { value: '', label: 'Connected wallet' }];
+    } else {
+      vaultOptions = options?.includeHedgey
+        ? [{ value: '', label: 'No Vaults Available' }]
+        : [{ value: '', label: 'Connected wallet' }];
+    }
+    return hedgeyEnabled && options?.includeHedgey
+      ? [...vaultOptions, { value: 'hedgey', label: 'Hedgey' }]
+      : vaultOptions;
+  };
+
+  const onVaultOrSourceChange = (value: string) => {
+    if (value === 'hedgey') {
+      setIsUsingHedgey(true);
+      return;
+    }
+    setIsUsingHedgey(false);
+    setValue('selectedVaultId', value, {
+      shouldDirty: true,
+    });
+    setGiftVaultId(value);
+    updateBalanceState(value, formGiftAmount, 'gift');
+  };
+
+  const onHedgeyVaultChange = (value: string) => {
+    setValue('selectedHedgeyVaultId', value, {
+      shouldDirty: true,
+    });
+    setGiftVaultId(value);
+    updateBalanceState(value, formGiftAmount, 'gift');
+  };
+
+  const onChangeHedgeyLockPeriod = (value: string) => {
+    setValue('hedgeyLockPeriod', value, {
+      shouldDirty: true,
+    });
+  };
+
   return (
     <TwoColumnLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -414,26 +503,11 @@ export function DistributionForm({
                     : vaults[0]
                     ? vaults[0].id.toString()
                     : '',
-                  label: 'CoVault',
+                  label: 'CoVault / Source',
                   disabled: shouldDisableGiftInput,
-                  onValueChange: value => {
-                    setValue('selectedVaultId', value, {
-                      shouldDirty: true,
-                    });
-                    setGiftVaultId(value);
-                    updateBalanceState(value, formGiftAmount, 'gift');
-                  },
+                  onValueChange: onVaultOrSourceChange,
                 })}
-                options={
-                  vaults.length
-                    ? vaults.map(t => {
-                        return {
-                          value: t.id.toString(),
-                          label: getVaultSymbolAddressString(t),
-                        };
-                      })
-                    : [{ value: '', label: 'No Vaults Available' }]
-                }
+                options={getVaultOptions({ includeHedgey: true })}
               ></Select>
             </Box>
             <Box css={{ width: '100%' }}>
@@ -482,6 +556,69 @@ export function DistributionForm({
               />
             </Box>
           </TwoColumnLayout>
+          {isUsingHedgey && (
+            <>
+              <TwoColumnLayout>
+                <Box css={{ width: '100%', marginTop: '1em' }}>
+                  <Select
+                    {...(register('selectedHedgeyVaultId'),
+                    {
+                      defaultValue: circleDist
+                        ? circleDist.vault.id.toString()
+                        : vaults[0]
+                        ? vaults[0].id.toString()
+                        : '',
+                      label: 'Distribution source',
+                      disabled: shouldDisableGiftInput,
+                      onValueChange: onHedgeyVaultChange,
+                    })}
+                    options={getVaultOptions({ includeHedgey: false })}
+                  />
+                </Box>
+                <Box css={{ width: '100%', marginTop: '1em' }}>
+                  Custom token input here if using connected wallet
+                </Box>
+              </TwoColumnLayout>
+              <TwoColumnLayout>
+                <Box css={{ width: '100%', marginTop: '1em' }}>
+                  <Select
+                    css={{ width: '100%' }}
+                    options={hedgeyLockPeriods}
+                    {...(register('hedgeyLockPeriod'),
+                    {
+                      id: 'hedgey-default-lock-period',
+                      label: 'Lock period',
+                      infoTooltip:
+                        "How long tokens are locked within the recipient's NFT",
+                      defaultValue: '12',
+                      onValueChange: onChangeHedgeyLockPeriod,
+                    })}
+                  />
+                </Box>
+                <Box css={{ width: '100%', marginTop: '1em' }}>
+                  <Select
+                    css={{ width: '100%' }}
+                    options={[
+                      { label: 'Yes', value: '1' },
+                      { label: 'No', value: '0' },
+                    ]}
+                    {...(register('hedgeyTransferable'),
+                    {
+                      label: 'Transferable',
+                      infoTooltip:
+                        'Allow the recipient to transfer their NFT (and their access to the locked tokens) to a different wallet address',
+                      id: 'hedgey-transferable',
+                      defaultValue: '1',
+                      onValueChange: value =>
+                        setValue('hedgeyTransferable', value, {
+                          shouldDirty: true,
+                        }),
+                    })}
+                  />
+                </Box>
+              </TwoColumnLayout>
+            </>
+          )}
         </Panel>
         {(fixedDist || circleDist) && <Summary distribution={circleDist} />}
         <Flex css={{ justifyContent: 'center', mb: '$sm' }}>
