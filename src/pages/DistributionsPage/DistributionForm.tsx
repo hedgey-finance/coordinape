@@ -1,3 +1,4 @@
+/* eslint-disable */
 import assert from 'assert';
 import React, { useEffect, useState } from 'react';
 
@@ -19,6 +20,7 @@ import { paths } from '../../routes/paths';
 import { IUser } from '../../types';
 import { LoadingModal, FormTokenField, zTokenString } from 'components';
 import { useApeSnackbar, useContracts } from 'hooks';
+import { useCurrentCircleIntegrations } from 'hooks/gql/useCurrentCircleIntegrations';
 import { hedgeyLockPeriods } from 'pages/CircleAdminPage/HedgeyIntegrationSettings';
 import {
   AppLink,
@@ -185,6 +187,15 @@ export function DistributionForm({
     if (fpVault)
       updateBalanceState(fpVault.id.toString(), totalFixedPayment, 'fixed');
   }, [fixedPaymentVaultId, totalFixedPayment]);
+
+  const integrations = useCurrentCircleIntegrations();
+  const hedgeyIntegration = integrations?.data?.find(integration => {
+    return integration.type === 'hedgey';
+  }) as {
+    id: number;
+    type: string;
+    data: { enabled: boolean; lockPeriod: string; transferable: string };
+  };
 
   useEffect(() => {
     if (isUsingHedgey) {
@@ -507,7 +518,9 @@ export function DistributionForm({
                   disabled: shouldDisableGiftInput,
                   onValueChange: onVaultOrSourceChange,
                 })}
-                options={getVaultOptions({ includeHedgey: true })}
+                options={getVaultOptions({
+                  includeHedgey: hedgeyIntegration?.data.enabled,
+                })}
               ></Select>
             </Box>
             <Box css={{ width: '100%' }}>
@@ -590,7 +603,7 @@ export function DistributionForm({
                       label: 'Lock period',
                       infoTooltip:
                         "How long tokens are locked within the recipient's NFT",
-                      defaultValue: '12',
+                      defaultValue: hedgeyIntegration?.data.lockPeriod,
                       onValueChange: onChangeHedgeyLockPeriod,
                     })}
                   />
@@ -608,7 +621,7 @@ export function DistributionForm({
                       infoTooltip:
                         'Allow the recipient to transfer their NFT (and their access to the locked tokens) to a different wallet address',
                       id: 'hedgey-transferable',
-                      defaultValue: '1',
+                      defaultValue: hedgeyIntegration?.data.transferable,
                       onValueChange: value =>
                         setValue('hedgeyTransferable', value, {
                           shouldDirty: true,
