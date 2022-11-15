@@ -18,7 +18,12 @@ import { z } from 'zod';
 import { DISTRIBUTION_TYPE } from '../../config/constants';
 import { paths } from '../../routes/paths';
 import { IUser } from '../../types';
-import { LoadingModal, FormTokenField, zTokenString } from 'components';
+import {
+  LoadingModal,
+  FormTokenField,
+  zTokenString,
+  FormInputField,
+} from 'components';
 import { useApeSnackbar, useContracts } from 'hooks';
 import { useCurrentCircleIntegrations } from 'hooks/gql/useCurrentCircleIntegrations';
 import { hedgeyLockPeriods } from 'pages/CircleAdminPage/HedgeyIntegrationSettings';
@@ -39,6 +44,7 @@ import { getPreviousDistribution } from './queries';
 import type { EpochDataResult, Gift } from './queries';
 import { useSubmitDistribution } from './useSubmitDistribution';
 import { mapProfileIdsByAddress } from './utils';
+import { useLockedTokenDistribution } from './useLockedTokenDistribution';
 
 const headerStyle = {
   fontWeight: '$bold',
@@ -99,6 +105,7 @@ export function DistributionForm({
 
   const { showError } = useApeSnackbar();
   const submitDistribution = useSubmitDistribution();
+  const lockedTokenDistribution = useLockedTokenDistribution();
   const contracts = useContracts();
   const circle = epoch.circle;
   assert(circle);
@@ -124,6 +131,7 @@ export function DistributionForm({
     selectedHedgeyVaultId: z.string().optional(),
     hedgeyLockPeriod: z.string().optional(),
     hedgeyTransferable: z.string().optional(),
+    tokenContractAddress: z.string().optional(),
   });
   const FixedDistributionFormSchema = z.object({
     amount: z.string(),
@@ -167,6 +175,12 @@ export function DistributionForm({
     name: 'amount',
     control: fixedControl,
     defaultValue: '0',
+  });
+
+  const { field: tokenContractAddress } = useController({
+    name: 'tokenContractAddress',
+    control,
+    defaultValue: '0xE13FB676E9bdd7AFda91495eC4e027FC63212FC3',
   });
 
   useEffect(() => {
@@ -292,16 +306,44 @@ export function DistributionForm({
     const vault = findVault(
       isUsingHedgey ? value.selectedHedgeyVaultId : value.selectedVaultId
     );
-    assert(vault);
+
+    let result;
 
     const gifts = users.reduce((ret, user) => {
       ret[user.address] = user.received;
       return ret;
     }, {} as Record<string, number>);
-    // eslint-disable-next-line no-debugger
-    debugger;
+
+    if (isUsingHedgey) {
+      try {
+        result = await lockedTokenDistribution({
+          amount: value.amount.toString(),
+          tokenContractAddress: value.tokenContractAddress?.toString(),
+          gifts,
+          vault,
+          hedgeyLockPeriod: value.hedgeyLockPeriod,
+          epochId: epoch.id,
+          circleId: circle.id,
+        });
+      } catch (err) {
+        showError(err);
+        console.error('DistributionsPage.onSubmit:', err);
+        setGiftSubmitting(false);
+      }
+
+      setGiftSubmitting(false);
+
+      // could be due to user cancellation
+      if (!result) return;
+
+      refetch();
+      return;
+    }
+
+    assert(vault);
+
     try {
-      const result = await submitDistribution({
+      result = await submitDistribution({
         amount: value.amount.toString(),
         vault,
         gifts,
@@ -318,6 +360,7 @@ export function DistributionForm({
         giftAmount: value.amount.toString(),
         type: DISTRIBUTION_TYPE.GIFT,
       });
+
       setGiftSubmitting(false);
 
       // could be due to user cancellation
@@ -588,9 +631,17 @@ export function DistributionForm({
                     options={getVaultOptions({ includeHedgey: false })}
                   />
                 </Box>
-                <Box css={{ width: '100%', marginTop: '1em' }}>
+                {/* <Box css={{ width: '100%', marginTop: '1em' }}>
                   Custom token input here if using connected wallet
-                </Box>
+                </Box> */}
+                <FormInputField
+                  id="token_contract_address"
+                  name="tokenContractAddress"
+                  control={control}
+                  label="Token Contract Address"
+                  infoTooltip="This will be the circle name that your users will select"
+                  showFieldErrors
+                />
               </TwoColumnLayout>
               <TwoColumnLayout>
                 <Box css={{ width: '100%', marginTop: '1em' }}>
