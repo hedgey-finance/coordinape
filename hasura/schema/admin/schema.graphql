@@ -1132,6 +1132,7 @@ type circle_api_keys {
   """
   circle: circles!
   circle_id: bigint!
+  create_contributions: Boolean!
   create_vouches: Boolean!
 
   """
@@ -1143,6 +1144,7 @@ type circle_api_keys {
   hash: String!
   name: String!
   read_circle: Boolean!
+  read_contributions: Boolean!
   read_epochs: Boolean!
   read_member_profiles: Boolean!
   read_nominees: Boolean!
@@ -1230,6 +1232,7 @@ input circle_api_keys_bool_exp {
   _or: [circle_api_keys_bool_exp!]
   circle: circles_bool_exp
   circle_id: bigint_comparison_exp
+  create_contributions: Boolean_comparison_exp
   create_vouches: Boolean_comparison_exp
   createdByUser: users_bool_exp
   created_at: timestamptz_comparison_exp
@@ -1237,6 +1240,7 @@ input circle_api_keys_bool_exp {
   hash: String_comparison_exp
   name: String_comparison_exp
   read_circle: Boolean_comparison_exp
+  read_contributions: Boolean_comparison_exp
   read_epochs: Boolean_comparison_exp
   read_member_profiles: Boolean_comparison_exp
   read_nominees: Boolean_comparison_exp
@@ -1269,6 +1273,7 @@ input type for inserting data into table "circle_api_keys"
 input circle_api_keys_insert_input {
   circle: circles_obj_rel_insert_input
   circle_id: bigint
+  create_contributions: Boolean
   create_vouches: Boolean
   createdByUser: users_obj_rel_insert_input
   created_at: timestamptz
@@ -1276,6 +1281,7 @@ input circle_api_keys_insert_input {
   hash: String
   name: String
   read_circle: Boolean
+  read_contributions: Boolean
   read_epochs: Boolean
   read_member_profiles: Boolean
   read_nominees: Boolean
@@ -1344,6 +1350,18 @@ type circle_api_keys_mutation_response {
 }
 
 """
+input type for inserting object relation for remote table "circle_api_keys"
+"""
+input circle_api_keys_obj_rel_insert_input {
+  data: circle_api_keys_insert_input!
+
+  """
+  upsert condition
+  """
+  on_conflict: circle_api_keys_on_conflict
+}
+
+"""
 on_conflict condition type for table "circle_api_keys"
 """
 input circle_api_keys_on_conflict {
@@ -1358,6 +1376,7 @@ Ordering options when selecting data from "circle_api_keys".
 input circle_api_keys_order_by {
   circle: circles_order_by
   circle_id: order_by
+  create_contributions: order_by
   create_vouches: order_by
   createdByUser: users_order_by
   created_at: order_by
@@ -1365,6 +1384,7 @@ input circle_api_keys_order_by {
   hash: order_by
   name: order_by
   read_circle: order_by
+  read_contributions: order_by
   read_epochs: order_by
   read_member_profiles: order_by
   read_nominees: order_by
@@ -1388,6 +1408,11 @@ enum circle_api_keys_select_column {
   column name
   """
   circle_id
+
+  """
+  column name
+  """
+  create_contributions
 
   """
   column name
@@ -1418,6 +1443,11 @@ enum circle_api_keys_select_column {
   column name
   """
   read_circle
+
+  """
+  column name
+  """
+  read_contributions
 
   """
   column name
@@ -1455,12 +1485,14 @@ input type for updating data in table "circle_api_keys"
 """
 input circle_api_keys_set_input {
   circle_id: bigint
+  create_contributions: Boolean
   create_vouches: Boolean
   created_at: timestamptz
   created_by: bigint
   hash: String
   name: String
   read_circle: Boolean
+  read_contributions: Boolean
   read_epochs: Boolean
   read_member_profiles: Boolean
   read_nominees: Boolean
@@ -1537,12 +1569,14 @@ Initial value of the column from where the streaming should start
 """
 input circle_api_keys_stream_cursor_value_input {
   circle_id: bigint
+  create_contributions: Boolean
   create_vouches: Boolean
   created_at: timestamptz
   created_by: bigint
   hash: String
   name: String
   read_circle: Boolean
+  read_contributions: Boolean
   read_epochs: Boolean
   read_member_profiles: Boolean
   read_nominees: Boolean
@@ -1579,6 +1613,11 @@ enum circle_api_keys_update_column {
   """
   column name
   """
+  create_contributions
+
+  """
+  column name
+  """
   create_vouches
 
   """
@@ -1605,6 +1644,11 @@ enum circle_api_keys_update_column {
   column name
   """
   read_circle
+
+  """
+  column name
+  """
+  read_contributions
 
   """
   column name
@@ -3686,6 +3730,7 @@ type circles {
     """
     where: pending_token_gifts_bool_exp
   ): pending_token_gifts_aggregate!
+  show_pending_gives: Boolean!
   team_sel_text: String
   team_selection: Boolean!
   telegram_id: String
@@ -3985,6 +4030,7 @@ input circles_bool_exp {
   organization: organizations_bool_exp
   organization_id: Int_comparison_exp
   pending_token_gifts: pending_token_gifts_bool_exp
+  show_pending_gives: Boolean_comparison_exp
   team_sel_text: String_comparison_exp
   team_selection: Boolean_comparison_exp
   telegram_id: String_comparison_exp
@@ -4049,6 +4095,7 @@ input circles_insert_input {
   organization: organizations_obj_rel_insert_input
   organization_id: Int
   pending_token_gifts: pending_token_gifts_arr_rel_insert_input
+  show_pending_gives: Boolean
   team_sel_text: String
   team_selection: Boolean
   telegram_id: String
@@ -4224,6 +4271,7 @@ input circles_order_by {
   organization: organizations_order_by
   organization_id: order_by
   pending_token_gifts_aggregate: pending_token_gifts_aggregate_order_by
+  show_pending_gives: order_by
   team_sel_text: order_by
   team_selection: order_by
   telegram_id: order_by
@@ -4335,6 +4383,11 @@ enum circles_select_column {
   """
   column name
   """
+  show_pending_gives
+
+  """
+  column name
+  """
   team_sel_text
 
   """
@@ -4389,6 +4442,7 @@ input circles_set_input {
   nomination_days_limit: Int
   only_giver_vouch: Boolean
   organization_id: Int
+  show_pending_gives: Boolean
   team_sel_text: String
   team_selection: Boolean
   telegram_id: String
@@ -4500,6 +4554,7 @@ input circles_stream_cursor_value_input {
   nomination_days_limit: Int
   only_giver_vouch: Boolean
   organization_id: Int
+  show_pending_gives: Boolean
   team_sel_text: String
   team_selection: Boolean
   telegram_id: String
@@ -4619,6 +4674,11 @@ enum circles_update_column {
   column name
   """
   organization_id
+
+  """
+  column name
+  """
+  show_pending_gives
 
   """
   column name
@@ -5381,6 +5441,12 @@ type contributions {
   circle: circles!
   circle_id: bigint!
   created_at: timestamptz!
+
+  """
+  An object relationship
+  """
+  created_with_api_key: circle_api_keys
+  created_with_api_key_hash: String
   datetime_created: timestamptz!
   deleted_at: timestamptz
   description: String!
@@ -5476,6 +5542,8 @@ input contributions_bool_exp {
   circle: circles_bool_exp
   circle_id: bigint_comparison_exp
   created_at: timestamptz_comparison_exp
+  created_with_api_key: circle_api_keys_bool_exp
+  created_with_api_key_hash: String_comparison_exp
   datetime_created: timestamptz_comparison_exp
   deleted_at: timestamptz_comparison_exp
   description: String_comparison_exp
@@ -5511,6 +5579,8 @@ input contributions_insert_input {
   circle: circles_obj_rel_insert_input
   circle_id: bigint
   created_at: timestamptz
+  created_with_api_key: circle_api_keys_obj_rel_insert_input
+  created_with_api_key_hash: String
   datetime_created: timestamptz
   deleted_at: timestamptz
   description: String
@@ -5526,6 +5596,7 @@ aggregate max on columns
 type contributions_max_fields {
   circle_id: bigint
   created_at: timestamptz
+  created_with_api_key_hash: String
   datetime_created: timestamptz
   deleted_at: timestamptz
   description: String
@@ -5540,6 +5611,7 @@ order by max() on columns of table "contributions"
 input contributions_max_order_by {
   circle_id: order_by
   created_at: order_by
+  created_with_api_key_hash: order_by
   datetime_created: order_by
   deleted_at: order_by
   description: order_by
@@ -5554,6 +5626,7 @@ aggregate min on columns
 type contributions_min_fields {
   circle_id: bigint
   created_at: timestamptz
+  created_with_api_key_hash: String
   datetime_created: timestamptz
   deleted_at: timestamptz
   description: String
@@ -5568,6 +5641,7 @@ order by min() on columns of table "contributions"
 input contributions_min_order_by {
   circle_id: order_by
   created_at: order_by
+  created_with_api_key_hash: order_by
   datetime_created: order_by
   deleted_at: order_by
   description: order_by
@@ -5607,6 +5681,8 @@ input contributions_order_by {
   circle: circles_order_by
   circle_id: order_by
   created_at: order_by
+  created_with_api_key: circle_api_keys_order_by
+  created_with_api_key_hash: order_by
   datetime_created: order_by
   deleted_at: order_by
   description: order_by
@@ -5636,6 +5712,11 @@ enum contributions_select_column {
   column name
   """
   created_at
+
+  """
+  column name
+  """
+  created_with_api_key_hash
 
   """
   column name
@@ -5674,6 +5755,7 @@ input type for updating data in table "contributions"
 input contributions_set_input {
   circle_id: bigint
   created_at: timestamptz
+  created_with_api_key_hash: String
   datetime_created: timestamptz
   deleted_at: timestamptz
   description: String
@@ -5757,6 +5839,7 @@ Initial value of the column from where the streaming should start
 input contributions_stream_cursor_value_input {
   circle_id: bigint
   created_at: timestamptz
+  created_with_api_key_hash: String
   datetime_created: timestamptz
   deleted_at: timestamptz
   description: String
@@ -5796,6 +5879,11 @@ enum contributions_update_column {
   column name
   """
   created_at
+
+  """
+  column name
+  """
+  created_with_api_key_hash
 
   """
   column name
@@ -6934,6 +7022,7 @@ type epochs {
   circle_id: Int!
   created_at: timestamp!
   days: Int
+  description: String
 
   """
   An array relationship
@@ -7223,6 +7312,7 @@ input epochs_bool_exp {
   circle_id: Int_comparison_exp
   created_at: timestamp_comparison_exp
   days: Int_comparison_exp
+  description: String_comparison_exp
   distributions: distributions_bool_exp
   end_date: timestamptz_comparison_exp
   ended: Boolean_comparison_exp
@@ -7274,6 +7364,7 @@ input epochs_insert_input {
   circle_id: Int
   created_at: timestamp
   days: Int
+  description: String
   distributions: distributions_arr_rel_insert_input
   end_date: timestamptz
   ended: Boolean
@@ -7299,6 +7390,7 @@ type epochs_max_fields {
   circle_id: Int
   created_at: timestamp
   days: Int
+  description: String
   end_date: timestamptz
   grant: numeric
   id: bigint
@@ -7320,6 +7412,7 @@ input epochs_max_order_by {
   circle_id: order_by
   created_at: order_by
   days: order_by
+  description: order_by
   end_date: order_by
   grant: order_by
   id: order_by
@@ -7341,6 +7434,7 @@ type epochs_min_fields {
   circle_id: Int
   created_at: timestamp
   days: Int
+  description: String
   end_date: timestamptz
   grant: numeric
   id: bigint
@@ -7362,6 +7456,7 @@ input epochs_min_order_by {
   circle_id: order_by
   created_at: order_by
   days: order_by
+  description: order_by
   end_date: order_by
   grant: order_by
   id: order_by
@@ -7421,6 +7516,7 @@ input epochs_order_by {
   circle_id: order_by
   created_at: order_by
   days: order_by
+  description: order_by
   distributions_aggregate: distributions_aggregate_order_by
   end_date: order_by
   ended: order_by
@@ -7464,6 +7560,11 @@ enum epochs_select_column {
   column name
   """
   days
+
+  """
+  column name
+  """
+  description
 
   """
   column name
@@ -7538,6 +7639,7 @@ input epochs_set_input {
   circle_id: Int
   created_at: timestamp
   days: Int
+  description: String
   end_date: timestamptz
   ended: Boolean
   grant: numeric
@@ -7659,6 +7761,7 @@ input epochs_stream_cursor_value_input {
   circle_id: Int
   created_at: timestamp
   days: Int
+  description: String
   end_date: timestamptz
   ended: Boolean
   grant: numeric
@@ -7720,6 +7823,11 @@ enum epochs_update_column {
   column name
   """
   days
+
+  """
+  column name
+  """
+  description
 
   """
   column name
@@ -14830,11 +14938,132 @@ type profiles {
   background: String
   bio: String
   chat_id: String
+
+  """
+  An array relationship
+  """
+  claims(
+    """
+    distinct select on columns
+    """
+    distinct_on: [claims_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [claims_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: claims_bool_exp
+  ): [claims!]!
+
+  """
+  An aggregate relationship
+  """
+  claims_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [claims_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [claims_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: claims_bool_exp
+  ): claims_aggregate!
   created_at: timestamp!
   discord_username: String
+
+  """
+  An array relationship
+  """
+  distributions(
+    """
+    distinct select on columns
+    """
+    distinct_on: [distributions_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [distributions_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: distributions_bool_exp
+  ): [distributions!]!
+
+  """
+  An aggregate relationship
+  """
+  distributions_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [distributions_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [distributions_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: distributions_bool_exp
+  ): distributions_aggregate!
   github_username: String
   id: bigint!
   medium_username: String
+  name: String
   skills: String
   telegram_username: String
   twitter_username: String
@@ -15067,11 +15296,14 @@ input profiles_bool_exp {
   background: String_comparison_exp
   bio: String_comparison_exp
   chat_id: String_comparison_exp
+  claims: claims_bool_exp
   created_at: timestamp_comparison_exp
   discord_username: String_comparison_exp
+  distributions: distributions_bool_exp
   github_username: String_comparison_exp
   id: bigint_comparison_exp
   medium_username: String_comparison_exp
+  name: String_comparison_exp
   skills: String_comparison_exp
   telegram_username: String_comparison_exp
   twitter_username: String_comparison_exp
@@ -15090,6 +15322,11 @@ enum profiles_constraint {
   unique or primary key constraint on columns "address"
   """
   profiles_address_key
+
+  """
+  unique or primary key constraint on columns "name"
+  """
+  profiles_name_key
 
   """
   unique or primary key constraint on columns "id"
@@ -15114,11 +15351,14 @@ input profiles_insert_input {
   background: String
   bio: String
   chat_id: String
+  claims: claims_arr_rel_insert_input
   created_at: timestamp
   discord_username: String
+  distributions: distributions_arr_rel_insert_input
   github_username: String
   id: bigint
   medium_username: String
+  name: String
   skills: String
   telegram_username: String
   twitter_username: String
@@ -15143,6 +15383,7 @@ type profiles_max_fields {
   github_username: String
   id: bigint
   medium_username: String
+  name: String
   skills: String
   telegram_username: String
   twitter_username: String
@@ -15164,6 +15405,7 @@ type profiles_min_fields {
   github_username: String
   id: bigint
   medium_username: String
+  name: String
   skills: String
   telegram_username: String
   twitter_username: String
@@ -15217,11 +15459,14 @@ input profiles_order_by {
   background: order_by
   bio: order_by
   chat_id: order_by
+  claims_aggregate: claims_aggregate_order_by
   created_at: order_by
   discord_username: order_by
+  distributions_aggregate: distributions_aggregate_order_by
   github_username: order_by
   id: order_by
   medium_username: order_by
+  name: order_by
   skills: order_by
   telegram_username: order_by
   twitter_username: order_by
@@ -15301,6 +15546,11 @@ enum profiles_select_column {
   """
   column name
   """
+  name
+
+  """
+  column name
+  """
   skills
 
   """
@@ -15339,6 +15589,7 @@ input profiles_set_input {
   github_username: String
   id: bigint
   medium_username: String
+  name: String
   skills: String
   telegram_username: String
   twitter_username: String
@@ -15397,6 +15648,7 @@ input profiles_stream_cursor_value_input {
   github_username: String
   id: bigint
   medium_username: String
+  name: String
   skills: String
   telegram_username: String
   twitter_username: String
@@ -15469,6 +15721,11 @@ enum profiles_update_column {
   column name
   """
   medium_username
+
+  """
+  column name
+  """
+  name
 
   """
   column name

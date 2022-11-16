@@ -19,14 +19,14 @@ import {
   TextField,
   FormLabel,
   Box,
-  TextArea,
   AppLink,
   Flex,
   Panel,
   Tooltip,
+  BackButton,
+  TextArea,
+  Link,
 } from 'ui';
-import BackButton from 'ui/BackButton';
-import HintButton from 'ui/HintButton';
 import { SingleColumnLayout } from 'ui/layouts';
 
 const schema = z
@@ -137,7 +137,7 @@ export const NewNominationPage = () => {
           <BackButton />
         </AppLink>
       </Box>
-      <Flex css={{ alignItems: 'center', mb: '$sm' }}>
+      <Flex alignItems="center" css={{ mb: '$sm' }}>
         <Text h1>Nominate Member</Text>
       </Flex>
       <Box
@@ -252,6 +252,7 @@ export const NewNominationPage = () => {
                   </Tooltip>
                 </FormLabel>
                 <TextArea
+                  autoSize
                   rows={4}
                   id="description"
                   {...description}
@@ -306,13 +307,15 @@ export const NewNominationPage = () => {
             </Panel>
           )}
           <Box css={{ mt: '$md' }}>
-            <HintButton
+            <Link
+              target="_blank"
+              rel="noreferrer"
               href={
                 'https://docs.coordinape.com/get-started/members/vouching-new-members'
               }
             >
               Documentation: Learn More About Vouching
-            </HintButton>
+            </Link>
           </Box>
         </Panel>
       </Form>

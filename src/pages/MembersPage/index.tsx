@@ -5,9 +5,11 @@ import { constants as ethersConstants } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
 import { isUserAdmin } from 'lib/users';
 import { useQuery } from 'react-query';
+import { NavLink } from 'react-router-dom';
+import { disabledStyle } from 'stitches.config';
 
 import { LoadingModal } from 'components';
-import { useApiAdminCircle, useContracts } from 'hooks';
+import { useApeSnackbar, useApiAdminCircle, useContracts } from 'hooks';
 import { useCircleOrg } from 'hooks/gql/useCircleOrg';
 import { useVaults } from 'hooks/gql/useVaults';
 import useMobileDetect from 'hooks/useMobileDetect';
@@ -43,6 +45,7 @@ export interface IDeleteUser {
 
 const MembersPage = () => {
   const { isMobile } = useMobileDetect();
+  const { showError } = useApeSnackbar();
 
   const [keyword, setKeyword] = useState<string>('');
   const [deleteUserDialog, setDeleteUserDialog] = useState<
@@ -69,7 +72,11 @@ const MembersPage = () => {
     circleEpochsStatus,
   } = useSelectedCircle();
 
-  const { data: circle } = useQuery(
+  const {
+    isError: circleSettingsHasError,
+    error: circleSettingsError,
+    data: circle,
+  } = useQuery(
     [QUERY_KEY_CIRCLE_SETTINGS, circleId],
     () => getCircleSettings(circleId),
     {
@@ -81,19 +88,9 @@ const MembersPage = () => {
     }
   );
 
-  const { deleteUser } = useApiAdminCircle(circleId);
-
-  const onChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword(event.target.value);
-  };
-
-  const isAdmin = isUserAdmin(me);
-
   const {
-    isLoading,
-    isError,
-    isIdle,
-    error,
+    isError: activeNomineesHasError,
+    error: activeNomineesError,
     data: activeNominees,
     refetch: refetchNominees,
   } = useQuery(
@@ -105,12 +102,16 @@ const MembersPage = () => {
 
       //minmize background refetch
       refetchOnWindowFocus: false,
-
+      staleTime: Infinity,
       notifyOnChangeProps: ['data'],
     }
   );
 
-  const { data: fixedPayment } = useQuery(
+  const {
+    isError: fixedPaymentHasError,
+    error: fixedPaymentError,
+    data: fixedPayment,
+  } = useQuery(
     [QUERY_KEY_FIXED_PAYMENT, circleId],
     () => getFixedPayment(circleId),
     {
@@ -118,14 +119,20 @@ const MembersPage = () => {
       enabled: !!circleId,
       //minmize background refetch
       refetchOnWindowFocus: false,
-
       staleTime: Infinity,
       notifyOnChangeProps: ['data'],
     }
   );
 
+  const onChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
+
+  const isAdmin = isUserAdmin(me);
+
   const contracts = useContracts();
   const orgQuery = useCircleOrg(circleId);
+  const { deleteUser } = useApiAdminCircle(circleId);
 
   const vaultsQuery = useVaults({
     orgId: orgQuery.data?.id,
@@ -206,15 +213,27 @@ const MembersPage = () => {
     formatUnits(maxGiftTokens, getDecimals(stringifiedVaultId()))
   );
 
-  if (isLoading || isIdle) return <LoadingModal visible />;
-  if (isError) {
-    if (error instanceof Error) {
-      console.warn(error.message);
+  if (!activeNominees || !circle || !fixedPayment)
+    return <LoadingModal visible />;
+
+  if (activeNomineesHasError) {
+    if (activeNomineesError instanceof Error) {
+      showError(activeNomineesError.message);
+    }
+  }
+  if (circleSettingsHasError) {
+    if (circleSettingsError instanceof Error) {
+      showError(circleSettingsError.message);
+    }
+  }
+  if (fixedPaymentHasError) {
+    if (fixedPaymentError instanceof Error) {
+      showError(fixedPaymentError.message);
     }
   }
   return (
     <SingleColumnLayout>
-      <Flex css={{ alignItems: 'center', mb: '$md' }}>
+      <Flex alignItems="center" css={{ mb: '$md' }}>
         <Text h1>Circle Members</Text>
         {!isMobile && (
           <Flex
@@ -247,23 +266,28 @@ const MembersPage = () => {
               )}
             </Text>
             {isAdmin && (
-              <AppLink to={paths.membersAdd(selectedCircle.id)}>
-                <Button color="primary" outlined size="small">
-                  Add Members
-                </Button>
-              </AppLink>
+              <Button
+                as={NavLink}
+                to={paths.membersAdd(selectedCircle.id)}
+                color="primary"
+                outlined
+                size="small"
+              >
+                Add Members
+              </Button>
             )}
             {circle?.hasVouching && (
-              <AppLink to={paths.membersNominate(selectedCircle.id)}>
-                <Button
-                  size="small"
-                  color="primary"
-                  outlined
-                  disabled={cannotVouch}
-                >
-                  Nominate Member
-                </Button>
-              </AppLink>
+              <Button
+                as={NavLink}
+                to={paths.membersNominate(selectedCircle.id)}
+                size="small"
+                color="primary"
+                outlined
+                tabIndex={cannotVouch ? -1 : 0}
+                css={cannotVouch ? disabledStyle : {}}
+              >
+                Nominate Member
+              </Button>
             )}
           </Flex>
         )}
@@ -376,7 +400,7 @@ const MembersPage = () => {
       <Modal
         open={newCircle}
         title="Congrats! You just launched a new circle."
-        onClose={() => setNewCircle(false)}
+        onOpenChange={() => setNewCircle(false)}
       >
         <Flex column alignItems="start" css={{ gap: '$md' }}>
           <Text p>
@@ -391,7 +415,7 @@ const MembersPage = () => {
       <Modal
         open={!!deleteUserDialog}
         title={`Remove ${deleteUserDialog?.name} from circle`}
-        onClose={() => setDeleteUserDialog(undefined)}
+        onOpenChange={() => setDeleteUserDialog(undefined)}
       >
         <Flex column alignItems="start" css={{ gap: '$md' }}>
           <Button

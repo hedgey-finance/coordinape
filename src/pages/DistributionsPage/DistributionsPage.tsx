@@ -1,6 +1,7 @@
 import assert from 'assert';
 import React, { useState } from 'react';
 
+import { claimsUnwrappedAmount } from 'common-lib/distributions';
 import { isUserAdmin } from 'lib/users';
 import { getDisplayTokenString } from 'lib/vaults/tokens';
 import uniqBy from 'lodash/uniqBy';
@@ -11,12 +12,11 @@ import { useParams } from 'react-router-dom';
 import { DISTRIBUTION_TYPE } from '../../config/constants';
 import { useSelectedCircle } from '../../recoilState';
 import { paths } from '../../routes/paths';
-import BackButton from '../../ui/BackButton';
 import { LoadingModal } from 'components';
 import { QUERY_KEY_MAIN_HEADER } from 'components/MainLayout/getMainHeaderData';
 import { useApiAdminCircle, useContracts } from 'hooks';
 import useConnectedAddress from 'hooks/useConnectedAddress';
-import { AppLink, Box, Text } from 'ui';
+import { AppLink, BackButton, Box, Text } from 'ui';
 import { SingleColumnLayout } from 'ui/layouts';
 
 import { AllocationsTable } from './AllocationsTable';
@@ -54,6 +54,8 @@ export function DistributionsPage() {
           );
         return d;
       },
+      refetchOnWindowFocus: false,
+      notifyOnChangeProps: ['data'],
     }
   );
 
@@ -100,28 +102,11 @@ export function DistributionsPage() {
       d.distribution_type === DISTRIBUTION_TYPE.COMBINED
   );
 
-  const isCombinedDistribution =
-    fixedDist &&
-    circleDist &&
-    circleDist.distribution_type === DISTRIBUTION_TYPE.COMBINED &&
-    fixedDist.distribution_type === DISTRIBUTION_TYPE.COMBINED;
-
-  const unwrappedAmount = (
-    id?: number,
-    dist?: typeof epoch.distributions[0]
-  ) => {
-    if (!id || !dist) return 0;
-    return (
-      (dist.claims.find(c => c.profile?.id === id)?.new_amount || 0) *
-      dist.pricePerShare.toUnsafeFloat()
-    );
-  };
-
   const usersWithGiftnFixedAmounts = circleUsers
     .filter(u => {
       return (
         (fixedDist &&
-          fixedDist.claims.some(c => c.profile?.id === u.profile?.id)) ||
+          fixedDist.claims.some(c => c.profile_id === u.profile?.id)) ||
         (circle.fixed_payment_token_type && u.fixed_payment_amount) ||
         epoch.token_gifts?.some(g => g.recipient?.id === u.id && g.tokens > 0)
       );
@@ -130,23 +115,32 @@ export function DistributionsPage() {
       const receivedGifts = epoch.token_gifts?.filter(
         g => g.recipient_id === user.id
       );
-      const claimed = unwrappedAmount(user.profile?.id, fixedDist);
-      const circle_claimed = unwrappedAmount(user.profile?.id, circleDist);
+
+      const circleDistClaimAmount = circleDist?.claims.find(
+        c => c.profile_id === user.profile?.id
+      )?.new_amount;
+
+      const { circleClaimed, fixedPayment } = claimsUnwrappedAmount({
+        address: user.address,
+        fixedDistDecimals: fixedDist?.vault.decimals,
+        fixedGifts: fixedDist?.distribution_json.fixedGifts,
+        fixedDistPricePerShare: fixedDist?.pricePerShare,
+        circleDistDecimals: circleDist?.vault.decimals,
+        circleDistClaimAmount,
+        circleDistPricePerShare: circleDist?.pricePerShare,
+        circleFixedGifts: circleDist?.distribution_json.fixedGifts,
+      });
       return {
         id: user.id,
         name: user.name,
         address: user.address,
-        fixed_payment_amount: user.fixed_payment_amount ?? 0,
+        fixedPaymentAmount: user.fixed_payment_amount ?? 0,
+        fixedPaymentClaimed: fixedPayment,
         avatar: user.profile?.avatar,
         givers: receivedGifts?.length || 0,
         received: receivedGifts?.reduce((t, g) => t + g.tokens, 0) || 0,
-        claimed,
-        circle_claimed,
-        // if its a combined distribution we don't add the claim amounts twice
-        // to avoid double counting towards the total claimed
-        combined_claimed: !isCombinedDistribution
-          ? claimed + circle_claimed
-          : claimed,
+        circleClaimed,
+        combinedClaimed: fixedPayment + circleClaimed,
       };
     });
 

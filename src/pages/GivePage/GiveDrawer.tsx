@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useQuery } from 'react-query';
 
-import { ChevronDown, ChevronUp } from '../../icons/__generated';
-import { Avatar, Box, Button, Flex, Panel, Text, TextArea } from '../../ui';
+import { ChevronDown, ChevronsRight, ChevronUp, Edit } from 'icons/__generated';
+import { Avatar, Box, Button, Flex, Text, TextArea, MarkdownPreview } from 'ui';
 import { SaveState, SavingIndicator } from 'ui/SavingIndicator';
 
 import { Contribution } from './Contribution';
 import { ContributorButton } from './ContributorButton';
+import { QUERY_KEY_ALLOCATE_CONTRIBUTIONS } from './EpochStatementDrawer';
 import { GiveAllocator } from './GiveAllocator';
 import { Gift, Member } from './index';
 import { getContributionsForEpoch } from './queries';
@@ -27,6 +28,7 @@ type GiveDrawerProps = {
   setNeedToSave(save: boolean): void;
   noGivingAllowed: boolean;
   updateTeammate(id: number, teammate: boolean): void;
+  closeDrawer: () => void;
 };
 
 // GiveDrawer is the focused modal drawer to give/note/view contributions for one member
@@ -46,10 +48,11 @@ export const GiveDrawer = ({
   setNeedToSave,
   noGivingAllowed,
   updateTeammate,
+  closeDrawer,
 }: GiveDrawerProps) => {
   // fetch the contributions for this particular member
   const { data: contributions, refetch } = useQuery(
-    ['allocate-contributions', member.id],
+    [QUERY_KEY_ALLOCATE_CONTRIBUTIONS, member.id],
     () =>
       getContributionsForEpoch({
         circleId: member.circle_id,
@@ -83,8 +86,12 @@ export const GiveDrawer = ({
     if (member) {
       // on member change reload the contributions
       refetch().then();
-      // reset the need to save indicator so it doesnt say 'Changes Saved'
-      setNeedToSave(false);
+      // reset the need to save indicator so it doesnt say 'Changes Saved' when
+      // it has already moved to 'Saved'.
+
+      if (saveState == 'saved') {
+        setNeedToSave(false);
+      }
     }
   }, [member]);
 
@@ -107,25 +114,41 @@ export const GiveDrawer = ({
   };
 
   return (
-    <Box key={selectedMemberIdx} css={{ height: '100%', pt: '$md' }}>
-      <Flex>
-        <Button
-          color="white"
-          size="large"
-          css={nextPrevCss}
-          disabled={selectedMemberIdx == 0}
-          onClick={() => nextMember(false)}
-        >
-          <ChevronUp size="lg" />
-        </Button>
-        <Button
-          color="white"
-          css={nextPrevCss}
-          disabled={selectedMemberIdx == totalMembers - 1}
-          onClick={() => nextMember(true)}
-        >
-          <ChevronDown size="lg" />
-        </Button>
+    <Box key={selectedMemberIdx} css={{ height: '100%' }}>
+      <Flex
+        css={{
+          justifyContent: 'space-between',
+        }}
+      >
+        <Flex>
+          <Button
+            onClick={() => {
+              closeDrawer();
+            }}
+            color="textOnly"
+            noPadding
+            css={{ mr: '$lg' }}
+          >
+            <ChevronsRight size="lg" />
+          </Button>
+          <Button
+            color="white"
+            css={nextPrevCss}
+            disabled={selectedMemberIdx == 0}
+            onClick={() => nextMember(false)}
+          >
+            <ChevronUp size="lg" />
+          </Button>
+          <Button
+            color="white"
+            css={nextPrevCss}
+            disabled={selectedMemberIdx == totalMembers - 1}
+            onClick={() => nextMember(true)}
+          >
+            <ChevronDown size="lg" />
+          </Button>
+        </Flex>
+        <ContributorButton member={member} updateTeammate={updateTeammate} />
       </Flex>
       <Flex
         css={{
@@ -165,20 +188,15 @@ export const GiveDrawer = ({
           }}
           alignItems="center"
         >
-          <Flex
-            css={{
-              justifyContent: 'flex-start',
-              mr: '$lg',
-              ml: '0',
-            }}
-          >
-            <ContributorButton
-              member={member}
-              updateTeammate={updateTeammate}
-            />
-          </Flex>
           <Flex css={{ justifyContent: 'flex-end' }}>
-            <Box>
+            <SavingIndicator
+              css={{ mr: '$md' }}
+              saveState={saveState}
+              retry={() => {
+                saveNote({ ...gift }, note);
+              }}
+            />
+            <Flex css={{ '*': { minWidth: 0 } }}>
               <GiveAllocator
                 disabled={noGivingAllowed}
                 adjustGift={adjustGift}
@@ -187,7 +205,7 @@ export const GiveDrawer = ({
                 maxedOut={maxedOut}
                 optedOut={member.non_receiver || member.fixed_non_receiver}
               />
-            </Box>
+            </Flex>
           </Flex>
         </Flex>
       </Flex>
@@ -202,6 +220,7 @@ export const GiveDrawer = ({
           {/*</ApeInfoTooltip>*/}
         </Box>
         <TextArea
+          autoSize
           css={{
             backgroundColor: 'white',
             width: '100%',
@@ -209,25 +228,31 @@ export const GiveDrawer = ({
             mb: '$md',
             fontSize: '$medium',
           }}
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={true}
           value={note ?? ''}
           onChange={e => noteChanged(e.target.value)}
           placeholder="Say thanks or give constructive feedback."
         />
-        <Flex css={{ justifyContent: 'flex-end', alignItems: 'center' }}>
-          <SavingIndicator
-            saveState={saveState}
-            retry={() => {
-              saveNote({ ...gift }, note);
-            }}
-          />
+        <Flex css={{ justifyContent: 'flex-end', mt: '$md' }}>
+          <Button
+            color="primary"
+            disabled={selectedMemberIdx == totalMembers - 1}
+            onClick={() => nextMember(true)}
+          >
+            <Edit />
+            Next
+          </Button>
         </Flex>
       </Box>
 
-      <Box
+      <Flex
+        column
         css={{
           borderTop: '0.5px solid $secondaryText',
           mt: '$lg',
           pt: '$lg',
+          gap: '$md',
         }}
       >
         {member.bio && (
@@ -235,42 +260,46 @@ export const GiveDrawer = ({
             <Text semibold size="large">
               Epoch Statement
             </Text>
-            <Box css={{ mt: '$sm', pb: '$lg' }}>
-              <Panel nested css={{ mb: '$md', p: '$sm' }}>
-                <Text css={{ whiteSpace: 'pre-wrap' }} p>
-                  {member.bio}
-                </Text>
-              </Panel>
+            <Box
+              css={{
+                mb: '$xs',
+                p: '$md $sm',
+                borderBottom: '1px solid $border',
+              }}
+            >
+              <MarkdownPreview display source={member.bio} />
             </Box>
           </Box>
         )}
-        <Text semibold size="large">
-          Contributions
-        </Text>
-        <Box css={{ pb: '$lg', mt: '$sm' }}>
-          {!contributions && (
-            // TODO: Better loading indicator here -g
-            <Box>Loading...</Box>
-          )}
-          {contributions &&
-            (contributions.length == 0 ? (
-              <>
-                <Box>
-                  <Text inline color="neutral">
-                    <Text semibold inline color="neutral">
-                      {member.name}{' '}
+        <Flex column>
+          <Text semibold size="large">
+            Contributions
+          </Text>
+          <Box css={{ p: '$md $sm' }}>
+            {!contributions && (
+              // TODO: Better loading indicator here -g
+              <Box>Loading...</Box>
+            )}
+            {contributions &&
+              (contributions.length == 0 ? (
+                <>
+                  <Box>
+                    <Text inline color="neutral">
+                      <Text semibold inline color="neutral">
+                        {member.name}{' '}
+                      </Text>
+                      has no contributions recorded for this epoch
                     </Text>
-                    has no contributions recorded for this epoch
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              contributions.map(c => (
-                <Contribution key={c.id} contribution={c} />
-              ))
-            ))}
-        </Box>
-      </Box>
+                  </Box>
+                </>
+              ) : (
+                contributions.map(c => (
+                  <Contribution key={c.id} contribution={c} />
+                ))
+              ))}
+          </Box>
+        </Flex>
+      </Flex>
     </Box>
   );
 };

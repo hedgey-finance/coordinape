@@ -27,7 +27,6 @@ import {
   Form,
 } from 'ui';
 import { SingleColumnLayout } from 'ui/layouts';
-import { getCircleAvatar } from 'utils/domain';
 
 export const SummonCirclePage = () => {
   const navigate = useNavigate();
@@ -38,13 +37,10 @@ export const SummonCirclePage = () => {
   const { address: myAddress, myUsers } = useMyProfile();
 
   const [logoData, setLogoData] = useState<{
-    avatar: string;
+    avatar?: string;
     avatarRaw: File | null;
   }>({
-    avatar: getCircleAvatar({
-      avatar: undefined,
-      circleName: 'CO',
-    }),
+    avatar: undefined,
     avatarRaw: null,
   });
 
@@ -176,7 +172,7 @@ export const SummonCirclePage = () => {
                   '@sm': { gridTemplateColumns: '1fr' },
                 }}
               >
-                <Flex column css={{ alignItems: 'flex-start', gap: '$xs' }}>
+                <Flex column alignItems="start" css={{ gap: '$xs' }}>
                   <Text variant="label" as="label">
                     Circle logo
                     <Tooltip
@@ -188,9 +184,11 @@ export const SummonCirclePage = () => {
                   </Text>
                   <Flex
                     row
-                    css={{ alignItems: 'center', gap: '$sm', width: '100%' }}
+                    alignItems="center"
+                    css={{ gap: '$sm', width: '100%' }}
                   >
                     <Avatar
+                      name="CO"
                       size="medium"
                       margin="none"
                       path={logoData.avatar}

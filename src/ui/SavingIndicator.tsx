@@ -5,13 +5,15 @@ import { CSS } from 'stitches.config';
 import { Check, RefreshCcw, AlertTriangle } from 'icons/__generated';
 import { Button, Flex, Text } from 'ui';
 
-export type SaveState =
-  | 'stable' // nothing needs to happen
-  | 'buffering' // dirty, and we need to schedule
-  | 'scheduled' // we are actually scheduled to save to backend
-  | 'saving' // we are actively saving to backend
-  | 'saved' // we just saved to backend
-  | 'error'; // we received an error or unexpected state
+export const StateOptions = [
+  'stable', // nothing needs to happen
+  'buffering', // dirty, and we need to schedule
+  'scheduled', // we are actually scheduled to save to backend
+  'saving', // we are actively saving to backend
+  'saved', // we just saved to backend
+  'error', // we received an error or unexpected state
+] as const;
+export type SaveState = typeof StateOptions[number];
 
 // stable->buffering = something was dirtied
 // buffering->scheduled =  dirty state causes scheduling
@@ -29,32 +31,33 @@ export const SavingIndicator = ({
   css?: CSS;
   retry?: () => void;
 }) => {
-  const color = saveState == 'error' ? 'alert' : 'neutral';
   return (
-    <Flex css={{ ...css, minHeight: '$lg', alignItems: 'center' }}>
-      <Text size="small" color={color} css={{ gap: '$xs' }}>
+    <Flex alignItems="center" css={{ ...css, minHeight: '$lg' }}>
+      <Text size="small">
         {(saveState == 'saving' ||
           saveState == 'scheduled' ||
           saveState == 'buffering') && (
-          <>
-            <RefreshCcw /> Saving...
-          </>
+          <Text color="neutral" css={{ gap: '$xs' }}>
+            <RefreshCcw /> Saving
+          </Text>
         )}
         {saveState == 'saved' && (
-          <>
+          <Text color="complete" css={{ gap: '$xs' }}>
             <Check /> Saved
-          </>
+          </Text>
         )}
         {saveState == 'error' && (
-          <>
-            <AlertTriangle />
-            Error Saving
+          <Flex css={{ gap: '$xs' }}>
+            <Text color="alert" css={{ gap: '$xs' }}>
+              <AlertTriangle />
+              Error Saving
+            </Text>
             {retry && (
               <Button size="small" css={{ ml: '$xs' }} onClick={retry}>
                 Retry
               </Button>
             )}
-          </>
+          </Flex>
         )}
       </Text>
     </Flex>

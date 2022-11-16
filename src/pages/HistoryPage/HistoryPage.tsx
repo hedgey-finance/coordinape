@@ -109,11 +109,12 @@ export const HistoryPage = () => {
   return (
     <SingleColumnLayout>
       <Flex
+        alignItems="end"
         css={{
           justifyContent: 'space-between',
-          alignItems: 'flex-end',
           flexWrap: 'wrap',
           mb: '$md',
+          gap: '$md',
         }}
       >
         <Text h1>Epoch Overview</Text>
@@ -296,7 +297,7 @@ export const HistoryPage = () => {
       )}
       <Modal
         open={!!epochToDelete}
-        onClose={() => setEpochToDelete(undefined)}
+        onOpenChange={() => setEpochToDelete(undefined)}
         title={`Remove Epoch ${
           epochToDelete?.number ? epochToDelete.number : ''
         }`}

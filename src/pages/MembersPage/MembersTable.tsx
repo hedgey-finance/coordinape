@@ -278,12 +278,11 @@ const MemberRow = ({
         setShowOptOutChangeWarning(false);
         updateUser(user.address, { ...data, role: data.role ? 1 : 0 })
           .then(() => {
+            showInfo('Saved changes');
             queryClient.invalidateQueries(QUERY_KEY_FIXED_PAYMENT);
           })
           .catch(console.warn);
       }
-
-      showInfo('Saved changes');
     } catch (e) {
       console.warn(e);
     }
@@ -455,9 +454,9 @@ const MemberRow = ({
                 {user.name} Member Settings
               </Text>
               <Flex
+                alignItems="center"
                 css={{
                   justifyContent: 'space-between',
-                  alignItems: 'center',
                   gap: '$lg',
                   flexWrap: 'wrap',
                 }}
@@ -482,7 +481,7 @@ const MemberRow = ({
                     showFieldErrors
                     css={{ minWidth: '420px', '@sm': { minWidth: 0 } }}
                   />
-                  <Flex column css={{ alignItems: 'center', gap: '$md' }}>
+                  <Flex column alignItems="center" css={{ gap: '$md' }}>
                     <FormLabel type="label">
                       Circle Admin{' '}
                       <Tooltip
@@ -757,7 +756,7 @@ const MemberRow = ({
                 </Button>
               </Flex>
               <Modal
-                onClose={() => {
+                onOpenChange={() => {
                   setHasAcceptedOptOutWarning(true);
                   setShowOptOutChangeWarning(false);
                 }}
@@ -882,6 +881,7 @@ export const MembersTable = ({
   return (
     <>
       <MemberTable
+        key={circle.id}
         headers={headers}
         data={view}
         startingSortIndex={0}

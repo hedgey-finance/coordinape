@@ -6,7 +6,7 @@ import { Hidden } from '@material-ui/core';
 
 import { menuGroupStyle } from 'components/MainLayout/MainHeader';
 import isFeatureEnabled from 'config/features';
-import { useWalletStatus } from 'hooks/login';
+import type { WalletStatus } from 'hooks/login';
 import { useMyProfile } from 'recoilState/app';
 import { paths } from 'routes/paths';
 import {
@@ -23,9 +23,10 @@ import { shortenAddress } from 'utils';
 
 import { RecentTransactionsModal } from './RecentTransactionsModal';
 
-export const MyAvatarMenu = () => {
+type Props = { walletStatus: WalletStatus };
+export const MyAvatarMenu = ({ walletStatus }: Props) => {
   const myProfile = useMyProfile();
-  const { icon, address, logout } = useWalletStatus();
+  const { icon, address, logout } = walletStatus;
   const [showTxModal, setShowTxModal] = useState(false);
 
   const [mouseEnterPopover, setMouseEnterPopover] = useState(false);
@@ -44,9 +45,18 @@ export const MyAvatarMenu = () => {
       <Hidden smDown>
         <Popover open={mouseEnterPopover}>
           <PopoverTrigger
+            tabIndex={-1}
             css={{ outline: 'none' }}
-            asChild
             ref={triggerRef}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                setMouseEnterPopover(true);
+              }
+            }}
+            onMouseDown={() => {
+              clearTimeout(timeoutId);
+              setMouseEnterPopover(true);
+            }}
             onMouseEnter={() => {
               clearTimeout(timeoutId);
               setMouseEnterPopover(true);
@@ -64,6 +74,11 @@ export const MyAvatarMenu = () => {
             </Link>
           </PopoverTrigger>
           <PopoverContent
+            onKeyDown={e => {
+              if (e.key === 'Escape') {
+                setMouseEnterPopover(false);
+              }
+            }}
             onMouseEnter={() => {
               clearTimeout(timeoutId);
               setMouseEnterPopover(true);
@@ -111,6 +126,7 @@ export const MyAvatarMenu = () => {
                 <Link
                   type="menu"
                   css={{ fontSize: '$xs', color: '$headingText', mb: '$xs' }}
+                  href="#"
                   onClick={() => setShowTxModal(true)}
                 >
                   Recent Transactions
@@ -120,6 +136,7 @@ export const MyAvatarMenu = () => {
                 type="menu"
                 css={{ fontSize: '$xs', color: '$headingText' }}
                 onClick={logout}
+                href="#"
               >
                 Disconnect
               </Link>

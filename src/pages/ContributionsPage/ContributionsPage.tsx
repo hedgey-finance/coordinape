@@ -4,7 +4,7 @@ import dedent from 'dedent';
 import { debounce } from 'lodash';
 import { DateTime } from 'luxon';
 import { useForm, useController } from 'react-hook-form';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 import useConnectedAddress from '../../hooks/useConnectedAddress';
 import { useSelectedCircle } from '../../recoilState';
@@ -18,16 +18,24 @@ import {
   WonderColor,
   ChevronDown,
   ChevronUp,
+  Trash2,
+  ChevronsRight,
+  Edit,
 } from 'icons/__generated';
-import { Panel, Text, Box, Modal, Button, Flex } from 'ui';
+import { QUERY_KEY_ALLOCATE_CONTRIBUTIONS } from 'pages/GivePage/EpochStatementDrawer';
+import { Panel, Text, Box, Modal, Button, Flex, MarkdownPreview } from 'ui';
 import { SingleColumnLayout } from 'ui/layouts';
 import { SavingIndicator, SaveState } from 'ui/SavingIndicator';
 
+import { ContributionIntro } from './ContributionIntro';
+import { ContributionPanel } from './ContributionPanel';
+import { ContributionRow } from './ContributionRow';
 import {
   deleteContributionMutation,
   updateContributionMutation,
   createContributionMutation,
 } from './mutations';
+import { PlaceholderContributions } from './PlaceholderContributions';
 import {
   getContributionsAndEpochs,
   ContributionsAndEpochs,
@@ -41,7 +49,7 @@ import {
   createLinkedArray,
   LinkedElement,
   jumpToEpoch,
-  isEpochCurrent,
+  isEpochCurrentOrLater,
 } from './util';
 
 const DEBOUNCE_TIMEOUT = 1000;
@@ -103,6 +111,10 @@ const ContributionsPage = () => {
   const [currentIntContribution, setCurrentIntContribution] =
     useState<CurrentIntContribution | null>(null);
 
+  const [showMarkdown, setShowMarkDown] = useState<boolean>(true);
+
+  const queryClient = useQueryClient();
+
   const {
     data,
     refetch: refetchContributions,
@@ -160,6 +172,9 @@ const ContributionsPage = () => {
     useMutation(createContributionMutation, {
       onSuccess: newContribution => {
         refetchContributions();
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY_ALLOCATE_CONTRIBUTIONS],
+        });
         if (newContribution.insert_contributions_one) {
           updateSaveStateForContribution(NEW_CONTRIBUTION_ID, 'stable');
           setCurrentContribution({
@@ -234,6 +249,9 @@ const ContributionsPage = () => {
         refetchContributions();
         updateSaveStateForContribution(data.contribution_id, 'stable');
         reset();
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY_ALLOCATE_CONTRIBUTIONS],
+        });
       },
     }
   );
@@ -330,38 +348,49 @@ const ContributionsPage = () => {
 
   const currentUserId: number = memoizedEpochData.users[0]?.id;
 
+  const closeDrawer = () => {
+    setModalOpen(false);
+    setShowMarkDown(true);
+    setCurrentContribution(null);
+    setCurrentIntContribution(null);
+    resetCreateMutation();
+    resetUpdateMutation();
+    reset();
+  };
+  const newContribution = () => {
+    setCurrentContribution({
+      contribution: getNewContribution(
+        currentUserId,
+        memoizedEpochData.contributions[0]
+      ),
+      epoch: getCurrentEpoch(memoizedEpochData.epochs),
+    });
+    resetField('description', { defaultValue: '' });
+    resetCreateMutation();
+    setModalOpen(true);
+    setShowMarkDown(false);
+  };
+
   return (
     <>
       <SingleColumnLayout>
         <Flex
+          alignItems="end"
           css={{
             justifyContent: 'space-between',
-            alignItems: 'flex-end',
             flexWrap: 'wrap',
             gap: '$md',
           }}
         >
           <Text h1>Contributions</Text>
-          <Button
-            outlined
-            color="primary"
-            onClick={() => {
-              setCurrentContribution({
-                contribution: getNewContribution(
-                  currentUserId,
-                  memoizedEpochData.contributions[0]
-                ),
-                epoch: memoizedEpochData.epochs[0],
-              });
-              resetField('description', { defaultValue: '' });
-              resetCreateMutation();
-              setModalOpen(true);
-            }}
-          >
+          <Button outlined color="primary" onClick={newContribution}>
             Add Contribution
           </Button>
         </Flex>
         <Text p>What have you been working on?</Text>
+        {(memoizedEpochData.contributions || []).length >= 0 && (
+          <ContributionIntro />
+        )}
         <EpochGroup
           contributions={memoizedEpochData.contributions || []}
           epochs={memoizedEpochData.epochs || []}
@@ -372,103 +401,132 @@ const ContributionsPage = () => {
       </SingleColumnLayout>
       <Modal
         drawer
-        css={{
-          paddingBottom: 0,
-          paddingLeft: '$md',
-          paddingRight: '$md',
-          paddingTop: 0,
-          overflowY: 'scroll',
-        }}
+        showClose={false}
         open={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-          setCurrentContribution(null);
-          setCurrentIntContribution(null);
-          resetCreateMutation();
-          resetUpdateMutation();
-          reset();
+        onOpenChange={() => {
+          closeDrawer();
         }}
       >
-        <Panel invertForm css={{ '& textarea': { resize: 'vertical' } }}>
+        <Panel invertForm css={{ p: 0 }}>
           {currentContribution ? (
             <>
-              <Flex>
+              <Flex
+                alignItems="center"
+                css={{ justifyContent: 'space-between' }}
+              >
+                <Flex alignItems="center">
+                  <Button
+                    onClick={() => {
+                      closeDrawer();
+                    }}
+                    color="textOnly"
+                    noPadding
+                    css={{ mr: '$lg' }}
+                  >
+                    <ChevronsRight size="lg" />
+                  </Button>
+                  <Button
+                    color="white"
+                    size="large"
+                    css={nextPrevCss}
+                    disabled={
+                      currentContribution.contribution.prev() === undefined
+                    }
+                    onClick={() => {
+                      const prevContribution =
+                        currentContribution.contribution.prev();
+                      if (!prevContribution) return;
+                      prevContribution.next = () => ({
+                        ...currentContribution.contribution,
+                        description: descriptionField.value,
+                      });
+                      setCurrentContribution({
+                        contribution: prevContribution,
+                        epoch: jumpToEpoch(
+                          currentContribution.epoch,
+                          prevContribution.datetime_created
+                        ),
+                      });
+                      resetField('description', {
+                        defaultValue: prevContribution.description,
+                      });
+                    }}
+                  >
+                    <ChevronUp size="lg" />
+                  </Button>
+                  <Button
+                    color="white"
+                    css={nextPrevCss}
+                    disabled={
+                      currentContribution.contribution.next() === undefined
+                    }
+                    onClick={() => {
+                      const nextContribution =
+                        currentContribution.contribution.next();
+                      if (!nextContribution) return;
+                      nextContribution.prev = () => ({
+                        ...currentContribution.contribution,
+                        description: descriptionField.value,
+                      });
+                      setCurrentContribution({
+                        contribution: nextContribution,
+                        epoch: jumpToEpoch(
+                          currentContribution.epoch,
+                          nextContribution.datetime_created
+                        ),
+                      });
+                      resetField('description', {
+                        defaultValue: nextContribution.description,
+                      });
+                    }}
+                  >
+                    <ChevronDown size="lg" />
+                  </Button>
+                </Flex>
                 <Button
-                  color="white"
-                  size="large"
-                  css={nextPrevCss}
-                  disabled={
-                    currentContribution.contribution.prev() === undefined
-                  }
+                  color="textOnly"
+                  noPadding
+                  disabled={!currentContribution.contribution.id}
                   onClick={() => {
-                    const prevContribution =
-                      currentContribution.contribution.prev();
-                    if (!prevContribution) return;
-                    prevContribution.next = () => ({
-                      ...currentContribution.contribution,
-                      description: descriptionField.value,
-                    });
-                    setCurrentContribution({
-                      contribution: prevContribution,
-                      epoch: jumpToEpoch(
-                        currentContribution.epoch,
-                        prevContribution.datetime_created
-                      ),
-                    });
-                    resetField('description', {
-                      defaultValue: prevContribution.description,
+                    handleDebouncedDescriptionChange.cancel();
+                    deleteContribution({
+                      contribution_id: currentContribution.contribution.id,
                     });
                   }}
                 >
-                  <ChevronUp size="lg" />
-                </Button>
-                <Button
-                  color="white"
-                  css={nextPrevCss}
-                  disabled={
-                    currentContribution.contribution.next() === undefined
-                  }
-                  onClick={() => {
-                    const nextContribution =
-                      currentContribution.contribution.next();
-                    if (!nextContribution) return;
-                    nextContribution.prev = () => ({
-                      ...currentContribution.contribution,
-                      description: descriptionField.value,
-                    });
-                    setCurrentContribution({
-                      contribution: nextContribution,
-                      epoch: jumpToEpoch(
-                        currentContribution.epoch,
-                        nextContribution.datetime_created
-                      ),
-                    });
-                    resetField('description', {
-                      defaultValue: nextContribution.description,
-                    });
-                  }}
-                >
-                  <ChevronDown size="lg" />
+                  <Trash2 />
                 </Button>
               </Flex>
               <Flex
+                alignItems="center"
                 css={{
-                  alignItems: 'center',
                   my: '$xl',
+                  justifyContent: 'space-between',
                 }}
               >
-                <Text
-                  h3
-                  semibold
-                  css={{
-                    mr: '$md',
-                  }}
-                >
-                  {currentContribution.epoch.id
-                    ? renderEpochDate(currentContribution.epoch)
-                    : 'Latest'}
-                </Text>
-                {getEpochLabel(currentContribution.epoch)}
+                <Flex>
+                  <Text
+                    h3
+                    semibold
+                    css={{
+                      mr: '$md',
+                    }}
+                  >
+                    {currentContribution.epoch.id
+                      ? renderEpochDate(currentContribution.epoch)
+                      : 'Latest'}
+                  </Text>
+                  {getEpochLabel(currentContribution.epoch)}
+                </Flex>
+                {isEpochCurrentOrLater(currentContribution.epoch) && (
+                  <SavingIndicator
+                    saveState={saveState[currentContribution.contribution.id]}
+                    retry={() => {
+                      saveContribution(descriptionField.value);
+                      refetchContributions();
+                    }}
+                  />
+                )}
               </Flex>
               <Flex column css={{ gap: '$sm' }}>
                 <Flex
@@ -477,7 +535,7 @@ const ContributionsPage = () => {
                     alignItems: 'flex-end',
                   }}
                 >
-                  <Text inline semibold size="medium">
+                  <Text inline semibold size="large">
                     Contribution
                   </Text>
                   <Text variant="label">
@@ -486,74 +544,110 @@ const ContributionsPage = () => {
                     ).toFormat('LLL dd')}
                   </Text>
                 </Flex>
-                {isEpochCurrent(currentContribution.epoch) ? (
-                  <FormInputField
-                    id="description"
-                    name="description"
-                    control={control}
-                    defaultValue={currentContribution.contribution.description}
-                    areaProps={{
-                      autoFocus: true,
-                      onChange: e => {
-                        setValue('description', e.target.value);
-                        // Don't schedule a new save if a createContribution
-                        // request is inflight, since this will create
-                        // a duplicate contribution
-                        if (
-                          !(
-                            currentContribution.contribution.id ===
-                              NEW_CONTRIBUTION_ID &&
-                            saveState[currentContribution.contribution.id] ==
-                              'saving'
-                          )
-                        )
-                          updateSaveStateForContribution(
-                            currentContribution.contribution.id,
-                            'buffering'
-                          );
-                      },
-                    }}
-                    disabled={!isEpochCurrent(currentContribution.epoch)}
-                    placeholder="What have you been working on?"
-                    textArea
-                  />
-                ) : (
-                  <Panel nested>
-                    <Text p>
-                      {currentContribution.contribution.description}
-                    </Text>
-                  </Panel>
-                )}
-                {isEpochCurrent(currentContribution.epoch) && (
-                  <Flex
-                    css={{
-                      justifyContent: 'space-between',
-                      mt: '$sm',
-                    }}
-                  >
-                    <Button
-                      outlined
-                      color="destructive"
-                      size="small"
-                      disabled={!currentContribution.contribution.id}
+                {isEpochCurrentOrLater(currentContribution.epoch) ? (
+                  showMarkdown ? (
+                    <Box
+                      tabIndex={0}
+                      css={{ borderRadius: '$3' }}
                       onClick={() => {
-                        handleDebouncedDescriptionChange.cancel();
-                        deleteContribution({
-                          contribution_id: currentContribution.contribution.id,
-                        });
+                        setShowMarkDown(false);
+                      }}
+                      onKeyDown={e => {
+                        e.stopPropagation();
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setShowMarkDown(false);
+                        }
                       }}
                     >
-                      Delete
-                    </Button>
-                    <SavingIndicator
-                      saveState={saveState[currentContribution.contribution.id]}
-                      retry={() => {
-                        saveContribution(descriptionField.value);
-                        refetchContributions();
-                      }}
+                      <MarkdownPreview source={descriptionField.value} />
+                    </Box>
+                  ) : (
+                    <Box css={{ position: 'relative' }}>
+                      <FormInputField
+                        id="description"
+                        name="description"
+                        control={control}
+                        css={{
+                          textarea: {
+                            resize: 'vertical',
+                            pb: '$xl',
+                            minHeight: 'calc($2xl * 2)',
+                          },
+                        }}
+                        defaultValue={
+                          currentContribution.contribution.description
+                        }
+                        areaProps={{
+                          autoFocus: true,
+                          onChange: e => {
+                            setValue('description', e.target.value);
+                            // Don't schedule a new save if a createContribution
+                            // request is inflight, since this will create
+                            // a duplicate contribution
+                            if (
+                              !(
+                                currentContribution.contribution.id ===
+                                  NEW_CONTRIBUTION_ID &&
+                                saveState[
+                                  currentContribution.contribution.id
+                                ] == 'saving'
+                              )
+                            )
+                              updateSaveStateForContribution(
+                                currentContribution.contribution.id,
+                                'buffering'
+                              );
+                          },
+                          onBlur: () => {
+                            if (descriptionField.value.length > 0)
+                              setShowMarkDown(true);
+                          },
+                          onFocus: e => {
+                            e.currentTarget.setSelectionRange(
+                              e.currentTarget.value.length,
+                              e.currentTarget.value.length
+                            );
+                          },
+                        }}
+                        disabled={
+                          !isEpochCurrentOrLater(currentContribution.epoch)
+                        }
+                        placeholder="What have you been working on?"
+                        textArea
+                      />
+                      <Text
+                        inline
+                        size="small"
+                        color="secondary"
+                        css={{
+                          position: 'absolute',
+                          right: '$sm',
+                          bottom: '$sm',
+                        }}
+                      >
+                        Markdown Supported
+                      </Text>
+                    </Box>
+                  )
+                ) : (
+                  <Panel nested>
+                    <MarkdownPreview
+                      source={currentContribution.contribution.description}
                     />
-                  </Flex>
+                  </Panel>
                 )}
+
+                <Flex css={{ justifyContent: 'flex-end', mt: '$md' }}>
+                  <Button
+                    color="primary"
+                    onClick={newContribution}
+                    // adding onMouseDown because the onBlur event on the markdown-ready textarea was preventing onClick
+                    onMouseDown={newContribution}
+                  >
+                    <Edit />
+                    New
+                  </Button>
+                </Flex>
               </Flex>
             </>
           ) : currentIntContribution ? (
@@ -632,7 +726,6 @@ const EpochGroup = React.memo(function EpochGroup({
   userAddress,
 }: Omit<LinkedContributionsAndEpochs, 'users'> &
   SetActiveContributionProps & { userAddress?: string }) {
-  const activeEpoch = useMemo(() => getCurrentEpoch(epochs), [epochs.length]);
   return (
     <Flex column css={{ gap: '$1xl' }}>
       {epochs.map((epoch, idx, epochArray) => (
@@ -640,18 +733,10 @@ const EpochGroup = React.memo(function EpochGroup({
           <Box>
             <Text h2 bold css={{ gap: '$md' }}>
               {epoch.id === 0 ? 'Latest' : renderEpochDate(epoch)}
-              {activeEpoch?.id === epoch.id ? (
-                <Text tag color="active">
-                  {epoch.id === 0 ? 'Future' : 'Current'}
-                </Text>
-              ) : (
-                <Text tag color="complete">
-                  Complete
-                </Text>
-              )}
+              {getEpochLabel(epoch)}
             </Text>
           </Box>
-          <Panel css={{ gap: '$md', borderRadius: '$4', mt: '$lg' }}>
+          <ContributionPanel>
             <ContributionList
               contributions={contributions.filter(
                 contributionFilterFn({
@@ -664,7 +749,11 @@ const EpochGroup = React.memo(function EpochGroup({
               epoch={epoch}
               userAddress={userAddress}
             />
-          </Panel>
+          </ContributionPanel>
+
+          {contributions.length == 0 && idx == 0 && (
+            <PlaceholderContributions />
+          )}
         </Box>
       ))}
     </Flex>
@@ -704,44 +793,22 @@ const ContributionList = ({
       {contributions.length || integrationContributions?.length ? (
         <>
           {contributions.map(c => (
-            <Panel
+            <ContributionRow
               key={c.id}
-              css={{
-                border:
-                  currentContribution?.contribution.id === c.id
-                    ? '2px solid $link'
-                    : '2px solid $border',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s, border-color 0.3s',
-                background:
-                  currentContribution?.contribution.id === c.id
-                    ? '$highlight'
-                    : 'white',
-                '&:hover': {
-                  background: '$highlight',
-                  border: '2px solid $link',
-                },
-              }}
-              nested
+              active={currentContribution?.contribution.id === c.id}
+              description={c.description}
+              datetime_created={c.datetime_created}
               onClick={() => {
                 setActiveContribution(epoch, c, undefined);
               }}
-            >
-              <Flex css={{ justifyContent: 'space-between' }}>
-                <Text
-                  ellipsis
-                  css={{
-                    mr: '10px',
-                    maxWidth: '60em',
-                  }}
-                >
-                  {c.description}
-                </Text>
-                <Text variant="label" css={{ whiteSpace: 'nowrap' }}>
-                  {DateTime.fromISO(c.datetime_created).toFormat('LLL dd')}
-                </Text>
-              </Flex>
-            </Panel>
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setActiveContribution(epoch, c, undefined);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+            />
           ))}
           {integrationContributions?.map(c => (
             <Panel
@@ -758,6 +825,13 @@ const ContributionList = ({
               nested
               onClick={() => {
                 setActiveContribution(epoch, undefined, c);
+              }}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setActiveContribution(epoch, undefined, c);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
               }}
             >
               <Text
