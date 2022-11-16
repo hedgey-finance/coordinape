@@ -31,6 +31,22 @@ select_permissions:
         - name
         - type
       filter: {}
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - data
+        - name
+        - type
+      filter:
+        circle:
+          users:
+            _and:
+              - role:
+                  _eq: 1
+              - address:
+                  _eq: X-Hasura-Address
+      check: null
 delete_permissions:
   - role: user
     permission:

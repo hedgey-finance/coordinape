@@ -383,7 +383,13 @@ export const AllTypesProps: Record<string, any> = {
     name: 'order_by',
     type: 'order_by',
   },
+  circle_integrations_pk_columns_input: {
+    id: 'bigint',
+  },
   circle_integrations_select_column: true,
+  circle_integrations_set_input: {
+    data: 'json',
+  },
   circle_integrations_stddev_order_by: {
     circle_id: 'order_by',
     id: 'order_by',
@@ -410,6 +416,10 @@ export const AllTypesProps: Record<string, any> = {
     id: 'order_by',
   },
   circle_integrations_update_column: true,
+  circle_integrations_updates: {
+    _set: 'circle_integrations_set_input',
+    where: 'circle_integrations_bool_exp',
+  },
   circle_integrations_var_pop_order_by: {
     circle_id: 'order_by',
     id: 'order_by',
@@ -1714,6 +1724,17 @@ export const AllTypesProps: Record<string, any> = {
     updateUser: {
       payload: 'UpdateUserInput',
     },
+    update_circle_integrations: {
+      _set: 'circle_integrations_set_input',
+      where: 'circle_integrations_bool_exp',
+    },
+    update_circle_integrations_by_pk: {
+      _set: 'circle_integrations_set_input',
+      pk_columns: 'circle_integrations_pk_columns_input',
+    },
+    update_circle_integrations_many: {
+      updates: 'circle_integrations_updates',
+    },
     update_claims: {
       _set: 'claims_set_input',
       where: 'claims_bool_exp',
@@ -2481,6 +2502,7 @@ export const AllTypesProps: Record<string, any> = {
       where: 'pending_vault_transactions_bool_exp',
     },
     pending_vault_transactions_by_pk: {},
+    price_per_share: {},
     profiles: {
       distinct_on: 'profiles_select_column',
       order_by: 'profiles_order_by',
@@ -4509,6 +4531,9 @@ export const ReturnTypes: Record<string, any> = {
     updateEpoch: 'EpochResponse',
     updateTeammates: 'UpdateTeammatesResponse',
     updateUser: 'UserResponse',
+    update_circle_integrations: 'circle_integrations_mutation_response',
+    update_circle_integrations_by_pk: 'circle_integrations',
+    update_circle_integrations_many: 'circle_integrations_mutation_response',
     update_claims: 'claims_mutation_response',
     update_claims_by_pk: 'claims',
     update_claims_many: 'claims_mutation_response',
@@ -4766,6 +4791,7 @@ export const ReturnTypes: Record<string, any> = {
     pending_token_gifts_by_pk: 'pending_token_gifts',
     pending_vault_transactions: 'pending_vault_transactions',
     pending_vault_transactions_by_pk: 'pending_vault_transactions',
+    price_per_share: 'Float',
     profiles: 'profiles',
     profiles_by_pk: 'profiles',
     teammates: 'teammates',
@@ -5129,6 +5155,7 @@ export const ReturnTypes: Record<string, any> = {
     distributions_aggregate: 'distributions_aggregate',
     id: 'bigint',
     organization: 'organizations',
+    price_per_share: 'Float',
     profile: 'profiles',
     simple_token_address: 'String',
     symbol: 'String',

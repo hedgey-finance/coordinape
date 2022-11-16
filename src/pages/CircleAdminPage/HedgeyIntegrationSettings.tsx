@@ -4,6 +4,7 @@ import { Button, Flex, Modal, Select, SelectOption, Text } from 'ui';
 import {
   createCircleIntegration,
   deleteCircleIntegration,
+  updateCircleIntegration,
 } from 'lib/gql/mutations';
 
 function HedgeyIntro() {
@@ -60,23 +61,38 @@ export default function HedgeyIntegrationSettings(props: {
 
   const onSaveHedgeyIntegration = async (e: any) => {
     e.preventDefault();
-    if (circleIntegrationId) await deleteCircleIntegration(circleIntegrationId);
-    await createCircleIntegration(props.circleId, 'hedgey', 'Hedgey', {
-      enabled: hedgeyEnabled,
-      lockPeriod: hedgeyLockPeriod,
-      transferable: hedgeyTransferable,
-    });
+    if (circleIntegrationId) {
+      await updateCircleIntegration(circleIntegrationId, {
+        enabled: hedgeyEnabled,
+        lockPeriod: hedgeyLockPeriod,
+        transferable: hedgeyTransferable,
+      });
+    } else {
+      await createCircleIntegration(props.circleId, 'hedgey', 'Hedgey', {
+        enabled: hedgeyEnabled,
+        lockPeriod: hedgeyLockPeriod,
+        transferable: hedgeyTransferable,
+      });
+    }
   };
 
-  const onDisableHedgey = async () => {
+  const onDisableHedgey = async (e: any) => {
+    e.preventDefault();
     setHedgeyEnabled(false);
     setShowDisableModal(false);
-    if (circleIntegrationId) await deleteCircleIntegration(circleIntegrationId);
-    await createCircleIntegration(props.circleId, 'hedgey', 'Hedgey', {
-      enabled: false,
-      lockPeriod: hedgeyLockPeriod,
-      transferable: hedgeyTransferable,
-    });
+    if (circleIntegrationId) {
+      await updateCircleIntegration(circleIntegrationId, {
+        enabled: false,
+        lockPeriod: hedgeyLockPeriod,
+        transferable: hedgeyTransferable,
+      });
+    } else {
+      await createCircleIntegration(props.circleId, 'hedgey', 'Hedgey', {
+        enabled: false,
+        lockPeriod: hedgeyLockPeriod,
+        transferable: hedgeyTransferable,
+      });
+    }
   };
 
   return (
@@ -154,7 +170,7 @@ export default function HedgeyIntegrationSettings(props: {
       <Modal
         open={showDisableModal}
         title="Disable Hedgey?"
-        onClose={() => setShowDisableModal(false)}
+        onOpenChange={() => setShowDisableModal(false)}
       >
         Are you sure you want to disable the Hedgey integration?
         <Button

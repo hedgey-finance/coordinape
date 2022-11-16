@@ -1222,6 +1222,13 @@ input circle_integrations_order_by {
 }
 
 """
+primary key columns input for table: circle_integrations
+"""
+input circle_integrations_pk_columns_input {
+  id: bigint!
+}
+
+"""
 select columns of table "circle_integrations"
 """
 enum circle_integrations_select_column {
@@ -1249,6 +1256,15 @@ enum circle_integrations_select_column {
   column name
   """
   type
+}
+
+"""
+input type for updating data in table "circle_integrations"
+"""
+input circle_integrations_set_input {
+  data: json
+  name: String
+  type: String
 }
 
 """
@@ -1310,13 +1326,31 @@ input circle_integrations_sum_order_by {
 }
 
 """
-placeholder for update columns of table "circle_integrations" (current role has no relevant permissions)
+update columns of table "circle_integrations"
 """
 enum circle_integrations_update_column {
   """
-  placeholder (do not use)
+  column name
   """
-  _PLACEHOLDER
+  data
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  type
+}
+
+input circle_integrations_updates {
+  """
+  sets the columns of the filtered rows to the given values
+  """
+  _set: circle_integrations_set_input
+  where: circle_integrations_bool_exp!
 }
 
 """
@@ -5140,6 +5174,42 @@ type mutation_root {
   updateUser(payload: UpdateUserInput!): UserResponse
 
   """
+  update data of the table: "circle_integrations"
+  """
+  update_circle_integrations(
+    """
+    sets the columns of the filtered rows to the given values
+    """
+    _set: circle_integrations_set_input
+
+    """
+    filter the rows which have to be updated
+    """
+    where: circle_integrations_bool_exp!
+  ): circle_integrations_mutation_response
+
+  """
+  update single row of the table: "circle_integrations"
+  """
+  update_circle_integrations_by_pk(
+    """
+    sets the columns of the filtered rows to the given values
+    """
+    _set: circle_integrations_set_input
+    pk_columns: circle_integrations_pk_columns_input!
+  ): circle_integrations
+
+  """
+  update multiples rows of table: "circle_integrations"
+  """
+  update_circle_integrations_many(
+    """
+    updates to execute, in order
+    """
+    updates: [circle_integrations_updates!]!
+  ): [circle_integrations_mutation_response]
+
+  """
   update data of the table: "claims"
   """
   update_claims(
@@ -7792,6 +7862,7 @@ type query_root {
   fetch data from the table: "pending_vault_transactions" using primary key columns
   """
   pending_vault_transactions_by_pk(tx_hash: String!): pending_vault_transactions
+  price_per_share(chain_id: Int!, token_address: String): Float!
 
   """
   fetch data from the table: "profiles"
@@ -11874,6 +11945,7 @@ type vaults {
   An object relationship
   """
   organization: organizations!
+  price_per_share: Float!
 
   """
   An object relationship

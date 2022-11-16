@@ -1463,8 +1463,18 @@ export type ValueTypes = {
     name?: ValueTypes['order_by'] | undefined | null;
     type?: ValueTypes['order_by'] | undefined | null;
   };
+  /** primary key columns input for table: circle_integrations */
+  ['circle_integrations_pk_columns_input']: {
+    id: ValueTypes['bigint'];
+  };
   /** select columns of table "circle_integrations" */
   ['circle_integrations_select_column']: circle_integrations_select_column;
+  /** input type for updating data in table "circle_integrations" */
+  ['circle_integrations_set_input']: {
+    data?: ValueTypes['json'] | undefined | null;
+    name?: string | undefined | null;
+    type?: string | undefined | null;
+  };
   /** order by stddev() on columns of table "circle_integrations" */
   ['circle_integrations_stddev_order_by']: {
     circle_id?: ValueTypes['order_by'] | undefined | null;
@@ -1500,8 +1510,13 @@ export type ValueTypes = {
     circle_id?: ValueTypes['order_by'] | undefined | null;
     id?: ValueTypes['order_by'] | undefined | null;
   };
-  /** placeholder for update columns of table "circle_integrations" (current role has no relevant permissions) */
+  /** update columns of table "circle_integrations" */
   ['circle_integrations_update_column']: circle_integrations_update_column;
+  ['circle_integrations_updates']: {
+    /** sets the columns of the filtered rows to the given values */
+    _set?: ValueTypes['circle_integrations_set_input'] | undefined | null;
+    where: ValueTypes['circle_integrations_bool_exp'];
+  };
   /** order by var_pop() on columns of table "circle_integrations" */
   ['circle_integrations_var_pop_order_by']: {
     circle_id?: ValueTypes['order_by'] | undefined | null;
@@ -4203,6 +4218,32 @@ export type ValueTypes = {
       { payload: ValueTypes['UpdateUserInput'] },
       ValueTypes['UserResponse']
     ];
+    update_circle_integrations?: [
+      {
+        /** sets the columns of the filtered rows to the given values */
+        _set?:
+          | ValueTypes['circle_integrations_set_input']
+          | undefined
+          | null /** filter the rows which have to be updated */;
+        where: ValueTypes['circle_integrations_bool_exp'];
+      },
+      ValueTypes['circle_integrations_mutation_response']
+    ];
+    update_circle_integrations_by_pk?: [
+      {
+        /** sets the columns of the filtered rows to the given values */
+        _set?: ValueTypes['circle_integrations_set_input'] | undefined | null;
+        pk_columns: ValueTypes['circle_integrations_pk_columns_input'];
+      },
+      ValueTypes['circle_integrations']
+    ];
+    update_circle_integrations_many?: [
+      {
+        /** updates to execute, in order */
+        updates: Array<ValueTypes['circle_integrations_updates']>;
+      },
+      ValueTypes['circle_integrations_mutation_response']
+    ];
     update_claims?: [
       {
         /** sets the columns of the filtered rows to the given values */
@@ -6029,6 +6070,10 @@ export type ValueTypes = {
     pending_vault_transactions_by_pk?: [
       { tx_hash: string },
       ValueTypes['pending_vault_transactions']
+    ];
+    price_per_share?: [
+      { chain_id: number; token_address?: string | undefined | null },
+      boolean | `@${string}`
     ];
     profiles?: [
       {
@@ -8896,6 +8941,7 @@ export type ValueTypes = {
     id?: boolean | `@${string}`;
     /** An object relationship */
     organization?: ValueTypes['organizations'];
+    price_per_share?: boolean | `@${string}`;
     /** An object relationship */
     profile?: ValueTypes['profiles'];
     simple_token_address?: boolean | `@${string}`;
@@ -9505,8 +9551,12 @@ export type ModelTypes = {
   ['circle_integrations_on_conflict']: GraphQLTypes['circle_integrations_on_conflict'];
   /** Ordering options when selecting data from "circle_integrations". */
   ['circle_integrations_order_by']: GraphQLTypes['circle_integrations_order_by'];
+  /** primary key columns input for table: circle_integrations */
+  ['circle_integrations_pk_columns_input']: GraphQLTypes['circle_integrations_pk_columns_input'];
   /** select columns of table "circle_integrations" */
   ['circle_integrations_select_column']: GraphQLTypes['circle_integrations_select_column'];
+  /** input type for updating data in table "circle_integrations" */
+  ['circle_integrations_set_input']: GraphQLTypes['circle_integrations_set_input'];
   /** order by stddev() on columns of table "circle_integrations" */
   ['circle_integrations_stddev_order_by']: GraphQLTypes['circle_integrations_stddev_order_by'];
   /** order by stddev_pop() on columns of table "circle_integrations" */
@@ -9519,8 +9569,9 @@ export type ModelTypes = {
   ['circle_integrations_stream_cursor_value_input']: GraphQLTypes['circle_integrations_stream_cursor_value_input'];
   /** order by sum() on columns of table "circle_integrations" */
   ['circle_integrations_sum_order_by']: GraphQLTypes['circle_integrations_sum_order_by'];
-  /** placeholder for update columns of table "circle_integrations" (current role has no relevant permissions) */
+  /** update columns of table "circle_integrations" */
   ['circle_integrations_update_column']: GraphQLTypes['circle_integrations_update_column'];
+  ['circle_integrations_updates']: GraphQLTypes['circle_integrations_updates'];
   /** order by var_pop() on columns of table "circle_integrations" */
   ['circle_integrations_var_pop_order_by']: GraphQLTypes['circle_integrations_var_pop_order_by'];
   /** order by var_samp() on columns of table "circle_integrations" */
@@ -10429,6 +10480,18 @@ export type ModelTypes = {
     updateTeammates?: GraphQLTypes['UpdateTeammatesResponse'] | undefined;
     /** Update own user */
     updateUser?: GraphQLTypes['UserResponse'] | undefined;
+    /** update data of the table: "circle_integrations" */
+    update_circle_integrations?:
+      | GraphQLTypes['circle_integrations_mutation_response']
+      | undefined;
+    /** update single row of the table: "circle_integrations" */
+    update_circle_integrations_by_pk?:
+      | GraphQLTypes['circle_integrations']
+      | undefined;
+    /** update multiples rows of table: "circle_integrations" */
+    update_circle_integrations_many?:
+      | Array<GraphQLTypes['circle_integrations_mutation_response'] | undefined>
+      | undefined;
     /** update data of the table: "claims" */
     update_claims?: GraphQLTypes['claims_mutation_response'] | undefined;
     /** update single row of the table: "claims" */
@@ -10925,6 +10988,7 @@ export type ModelTypes = {
     pending_vault_transactions_by_pk?:
       | GraphQLTypes['pending_vault_transactions']
       | undefined;
+    price_per_share: number;
     /** fetch data from the table: "profiles" */
     profiles: Array<GraphQLTypes['profiles']>;
     /** fetch data from the table: "profiles" using primary key columns */
@@ -11614,6 +11678,7 @@ export type ModelTypes = {
     id: GraphQLTypes['bigint'];
     /** An object relationship */
     organization: GraphQLTypes['organizations'];
+    price_per_share: number;
     /** An object relationship */
     profile: GraphQLTypes['profiles'];
     simple_token_address: string;
@@ -12523,8 +12588,18 @@ export type GraphQLTypes = {
     name?: GraphQLTypes['order_by'] | undefined;
     type?: GraphQLTypes['order_by'] | undefined;
   };
+  /** primary key columns input for table: circle_integrations */
+  ['circle_integrations_pk_columns_input']: {
+    id: GraphQLTypes['bigint'];
+  };
   /** select columns of table "circle_integrations" */
   ['circle_integrations_select_column']: circle_integrations_select_column;
+  /** input type for updating data in table "circle_integrations" */
+  ['circle_integrations_set_input']: {
+    data?: GraphQLTypes['json'] | undefined;
+    name?: string | undefined;
+    type?: string | undefined;
+  };
   /** order by stddev() on columns of table "circle_integrations" */
   ['circle_integrations_stddev_order_by']: {
     circle_id?: GraphQLTypes['order_by'] | undefined;
@@ -12560,8 +12635,13 @@ export type GraphQLTypes = {
     circle_id?: GraphQLTypes['order_by'] | undefined;
     id?: GraphQLTypes['order_by'] | undefined;
   };
-  /** placeholder for update columns of table "circle_integrations" (current role has no relevant permissions) */
+  /** update columns of table "circle_integrations" */
   ['circle_integrations_update_column']: circle_integrations_update_column;
+  ['circle_integrations_updates']: {
+    /** sets the columns of the filtered rows to the given values */
+    _set?: GraphQLTypes['circle_integrations_set_input'] | undefined;
+    where: GraphQLTypes['circle_integrations_bool_exp'];
+  };
   /** order by var_pop() on columns of table "circle_integrations" */
   ['circle_integrations_var_pop_order_by']: {
     circle_id?: GraphQLTypes['order_by'] | undefined;
@@ -14540,6 +14620,18 @@ export type GraphQLTypes = {
     updateTeammates?: GraphQLTypes['UpdateTeammatesResponse'] | undefined;
     /** Update own user */
     updateUser?: GraphQLTypes['UserResponse'] | undefined;
+    /** update data of the table: "circle_integrations" */
+    update_circle_integrations?:
+      | GraphQLTypes['circle_integrations_mutation_response']
+      | undefined;
+    /** update single row of the table: "circle_integrations" */
+    update_circle_integrations_by_pk?:
+      | GraphQLTypes['circle_integrations']
+      | undefined;
+    /** update multiples rows of table: "circle_integrations" */
+    update_circle_integrations_many?:
+      | Array<GraphQLTypes['circle_integrations_mutation_response'] | undefined>
+      | undefined;
     /** update data of the table: "claims" */
     update_claims?: GraphQLTypes['claims_mutation_response'] | undefined;
     /** update single row of the table: "claims" */
@@ -15586,6 +15678,7 @@ export type GraphQLTypes = {
     pending_vault_transactions_by_pk?:
       | GraphQLTypes['pending_vault_transactions']
       | undefined;
+    price_per_share: number;
     /** fetch data from the table: "profiles" */
     profiles: Array<GraphQLTypes['profiles']>;
     /** fetch data from the table: "profiles" using primary key columns */
@@ -16949,6 +17042,7 @@ export type GraphQLTypes = {
     id: GraphQLTypes['bigint'];
     /** An object relationship */
     organization: GraphQLTypes['organizations'];
+    price_per_share: number;
     /** An object relationship */
     profile: GraphQLTypes['profiles'];
     simple_token_address: string;
@@ -17307,9 +17401,11 @@ export const enum circle_integrations_select_column {
   name = 'name',
   type = 'type',
 }
-/** placeholder for update columns of table "circle_integrations" (current role has no relevant permissions) */
+/** update columns of table "circle_integrations" */
 export const enum circle_integrations_update_column {
-  _PLACEHOLDER = '_PLACEHOLDER',
+  data = 'data',
+  name = 'name',
+  type = 'type',
 }
 /** select columns of table "circle_private" */
 export const enum circle_private_select_column {
