@@ -4882,6 +4882,305 @@ input jsonb_comparison_exp {
 }
 
 """
+columns and relationships of "locked_token_distribution"
+"""
+type locked_token_distribution {
+  distribution_json(
+    """
+    JSON select path
+    """
+    path: String
+  ): jsonb!
+
+  """
+  An object relationship
+  """
+  epoch: epochs!
+  epoch_id: bigint!
+  gift_amount: numeric!
+  id: bigint!
+  tx_hash: String!
+}
+
+"""
+aggregated selection of "locked_token_distribution"
+"""
+type locked_token_distribution_aggregate {
+  aggregate: locked_token_distribution_aggregate_fields
+  nodes: [locked_token_distribution!]!
+}
+
+"""
+aggregate fields of "locked_token_distribution"
+"""
+type locked_token_distribution_aggregate_fields {
+  avg: locked_token_distribution_avg_fields
+  count(
+    columns: [locked_token_distribution_select_column!]
+    distinct: Boolean
+  ): Int!
+  max: locked_token_distribution_max_fields
+  min: locked_token_distribution_min_fields
+  stddev: locked_token_distribution_stddev_fields
+  stddev_pop: locked_token_distribution_stddev_pop_fields
+  stddev_samp: locked_token_distribution_stddev_samp_fields
+  sum: locked_token_distribution_sum_fields
+  var_pop: locked_token_distribution_var_pop_fields
+  var_samp: locked_token_distribution_var_samp_fields
+  variance: locked_token_distribution_variance_fields
+}
+
+"""
+aggregate avg on columns
+"""
+type locked_token_distribution_avg_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "locked_token_distribution". All fields are combined with a logical 'AND'.
+"""
+input locked_token_distribution_bool_exp {
+  _and: [locked_token_distribution_bool_exp!]
+  _not: locked_token_distribution_bool_exp
+  _or: [locked_token_distribution_bool_exp!]
+  distribution_json: jsonb_comparison_exp
+  epoch: epochs_bool_exp
+  epoch_id: bigint_comparison_exp
+  gift_amount: numeric_comparison_exp
+  id: bigint_comparison_exp
+  tx_hash: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "locked_token_distribution"
+"""
+enum locked_token_distribution_constraint {
+  """
+  unique or primary key constraint on columns "id"
+  """
+  locked_token_distribution_pkey
+}
+
+"""
+input type for inserting data into table "locked_token_distribution"
+"""
+input locked_token_distribution_insert_input {
+  distribution_json: jsonb
+  epoch_id: bigint
+  gift_amount: numeric
+}
+
+"""
+aggregate max on columns
+"""
+type locked_token_distribution_max_fields {
+  epoch_id: bigint
+  gift_amount: numeric
+  id: bigint
+  tx_hash: String
+}
+
+"""
+aggregate min on columns
+"""
+type locked_token_distribution_min_fields {
+  epoch_id: bigint
+  gift_amount: numeric
+  id: bigint
+  tx_hash: String
+}
+
+"""
+response of any mutation on the table "locked_token_distribution"
+"""
+type locked_token_distribution_mutation_response {
+  """
+  number of rows affected by the mutation
+  """
+  affected_rows: Int!
+
+  """
+  data from the rows affected by the mutation
+  """
+  returning: [locked_token_distribution!]!
+}
+
+"""
+on_conflict condition type for table "locked_token_distribution"
+"""
+input locked_token_distribution_on_conflict {
+  constraint: locked_token_distribution_constraint!
+  update_columns: [locked_token_distribution_update_column!]! = []
+  where: locked_token_distribution_bool_exp
+}
+
+"""
+Ordering options when selecting data from "locked_token_distribution".
+"""
+input locked_token_distribution_order_by {
+  distribution_json: order_by
+  epoch: epochs_order_by
+  epoch_id: order_by
+  gift_amount: order_by
+  id: order_by
+  tx_hash: order_by
+}
+
+"""
+primary key columns input for table: locked_token_distribution
+"""
+input locked_token_distribution_pk_columns_input {
+  id: bigint!
+}
+
+"""
+select columns of table "locked_token_distribution"
+"""
+enum locked_token_distribution_select_column {
+  """
+  column name
+  """
+  distribution_json
+
+  """
+  column name
+  """
+  epoch_id
+
+  """
+  column name
+  """
+  gift_amount
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  tx_hash
+}
+
+"""
+input type for updating data in table "locked_token_distribution"
+"""
+input locked_token_distribution_set_input {
+  tx_hash: String
+}
+
+"""
+aggregate stddev on columns
+"""
+type locked_token_distribution_stddev_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
+aggregate stddev_pop on columns
+"""
+type locked_token_distribution_stddev_pop_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
+aggregate stddev_samp on columns
+"""
+type locked_token_distribution_stddev_samp_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
+Streaming cursor of the table "locked_token_distribution"
+"""
+input locked_token_distribution_stream_cursor_input {
+  """
+  Stream column input with initial value
+  """
+  initial_value: locked_token_distribution_stream_cursor_value_input!
+
+  """
+  cursor ordering
+  """
+  ordering: cursor_ordering
+}
+
+"""
+Initial value of the column from where the streaming should start
+"""
+input locked_token_distribution_stream_cursor_value_input {
+  distribution_json: jsonb
+  epoch_id: bigint
+  gift_amount: numeric
+  id: bigint
+  tx_hash: String
+}
+
+"""
+aggregate sum on columns
+"""
+type locked_token_distribution_sum_fields {
+  epoch_id: bigint
+  gift_amount: numeric
+  id: bigint
+}
+
+"""
+update columns of table "locked_token_distribution"
+"""
+enum locked_token_distribution_update_column {
+  """
+  column name
+  """
+  tx_hash
+}
+
+input locked_token_distribution_updates {
+  """
+  sets the columns of the filtered rows to the given values
+  """
+  _set: locked_token_distribution_set_input
+  where: locked_token_distribution_bool_exp!
+}
+
+"""
+aggregate var_pop on columns
+"""
+type locked_token_distribution_var_pop_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
+aggregate var_samp on columns
+"""
+type locked_token_distribution_var_samp_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
+aggregate variance on columns
+"""
+type locked_token_distribution_variance_fields {
+  epoch_id: Float
+  gift_amount: Float
+  id: Float
+}
+
+"""
 mutation root
 """
 type mutation_root {
@@ -5125,6 +5424,36 @@ type mutation_root {
   ): distributions
 
   """
+  insert data into the table: "locked_token_distribution"
+  """
+  insert_locked_token_distribution(
+    """
+    the rows to be inserted
+    """
+    objects: [locked_token_distribution_insert_input!]!
+
+    """
+    upsert condition
+    """
+    on_conflict: locked_token_distribution_on_conflict
+  ): locked_token_distribution_mutation_response
+
+  """
+  insert a single row into the table: "locked_token_distribution"
+  """
+  insert_locked_token_distribution_one(
+    """
+    the row to be inserted
+    """
+    object: locked_token_distribution_insert_input!
+
+    """
+    upsert condition
+    """
+    on_conflict: locked_token_distribution_on_conflict
+  ): locked_token_distribution
+
+  """
   insert data into the table: "pending_vault_transactions"
   """
   insert_pending_vault_transactions(
@@ -5290,6 +5619,42 @@ type mutation_root {
     """
     updates: [distributions_updates!]!
   ): [distributions_mutation_response]
+
+  """
+  update data of the table: "locked_token_distribution"
+  """
+  update_locked_token_distribution(
+    """
+    sets the columns of the filtered rows to the given values
+    """
+    _set: locked_token_distribution_set_input
+
+    """
+    filter the rows which have to be updated
+    """
+    where: locked_token_distribution_bool_exp!
+  ): locked_token_distribution_mutation_response
+
+  """
+  update single row of the table: "locked_token_distribution"
+  """
+  update_locked_token_distribution_by_pk(
+    """
+    sets the columns of the filtered rows to the given values
+    """
+    _set: locked_token_distribution_set_input
+    pk_columns: locked_token_distribution_pk_columns_input!
+  ): locked_token_distribution
+
+  """
+  update multiples rows of table: "locked_token_distribution"
+  """
+  update_locked_token_distribution_many(
+    """
+    updates to execute, in order
+    """
+    updates: [locked_token_distribution_updates!]!
+  ): [locked_token_distribution_mutation_response]
 
   """
   update data of the table: "organizations"
@@ -7664,6 +8029,71 @@ type query_root {
   ): [gift_private!]!
 
   """
+  fetch data from the table: "locked_token_distribution"
+  """
+  locked_token_distribution(
+    """
+    distinct select on columns
+    """
+    distinct_on: [locked_token_distribution_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [locked_token_distribution_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: locked_token_distribution_bool_exp
+  ): [locked_token_distribution!]!
+
+  """
+  fetch aggregated fields from the table: "locked_token_distribution"
+  """
+  locked_token_distribution_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [locked_token_distribution_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [locked_token_distribution_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: locked_token_distribution_bool_exp
+  ): locked_token_distribution_aggregate!
+
+  """
+  fetch data from the table: "locked_token_distribution" using primary key columns
+  """
+  locked_token_distribution_by_pk(id: bigint!): locked_token_distribution
+
+  """
   An array relationship
   """
   nominees(
@@ -8920,6 +9350,91 @@ type subscription_root {
     """
     where: gift_private_bool_exp
   ): [gift_private!]!
+
+  """
+  fetch data from the table: "locked_token_distribution"
+  """
+  locked_token_distribution(
+    """
+    distinct select on columns
+    """
+    distinct_on: [locked_token_distribution_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [locked_token_distribution_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: locked_token_distribution_bool_exp
+  ): [locked_token_distribution!]!
+
+  """
+  fetch aggregated fields from the table: "locked_token_distribution"
+  """
+  locked_token_distribution_aggregate(
+    """
+    distinct select on columns
+    """
+    distinct_on: [locked_token_distribution_select_column!]
+
+    """
+    limit the number of rows returned
+    """
+    limit: Int
+
+    """
+    skip the first n rows. Use only with order_by
+    """
+    offset: Int
+
+    """
+    sort the rows by one or more columns
+    """
+    order_by: [locked_token_distribution_order_by!]
+
+    """
+    filter the rows returned
+    """
+    where: locked_token_distribution_bool_exp
+  ): locked_token_distribution_aggregate!
+
+  """
+  fetch data from the table: "locked_token_distribution" using primary key columns
+  """
+  locked_token_distribution_by_pk(id: bigint!): locked_token_distribution
+
+  """
+  fetch data from the table in a streaming manner : "locked_token_distribution"
+  """
+  locked_token_distribution_stream(
+    """
+    maximum number of rows returned in a single batch
+    """
+    batch_size: Int!
+
+    """
+    cursor to stream the results returned by the query
+    """
+    cursor: [locked_token_distribution_stream_cursor_input]!
+
+    """
+    filter the rows returned
+    """
+    where: locked_token_distribution_bool_exp
+  ): [locked_token_distribution!]!
 
   """
   An array relationship

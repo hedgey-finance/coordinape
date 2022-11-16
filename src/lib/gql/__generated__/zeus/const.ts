@@ -1586,6 +1586,64 @@ export const AllTypesProps: Record<string, any> = {
     _neq: 'jsonb',
     _nin: 'jsonb',
   },
+  locked_token_distribution: {
+    distribution_json: {},
+  },
+  locked_token_distribution_aggregate_fields: {
+    count: {
+      columns: 'locked_token_distribution_select_column',
+    },
+  },
+  locked_token_distribution_bool_exp: {
+    _and: 'locked_token_distribution_bool_exp',
+    _not: 'locked_token_distribution_bool_exp',
+    _or: 'locked_token_distribution_bool_exp',
+    distribution_json: 'jsonb_comparison_exp',
+    epoch: 'epochs_bool_exp',
+    epoch_id: 'bigint_comparison_exp',
+    gift_amount: 'numeric_comparison_exp',
+    id: 'bigint_comparison_exp',
+    tx_hash: 'String_comparison_exp',
+  },
+  locked_token_distribution_constraint: true,
+  locked_token_distribution_insert_input: {
+    distribution_json: 'jsonb',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+  },
+  locked_token_distribution_on_conflict: {
+    constraint: 'locked_token_distribution_constraint',
+    update_columns: 'locked_token_distribution_update_column',
+    where: 'locked_token_distribution_bool_exp',
+  },
+  locked_token_distribution_order_by: {
+    distribution_json: 'order_by',
+    epoch: 'epochs_order_by',
+    epoch_id: 'order_by',
+    gift_amount: 'order_by',
+    id: 'order_by',
+    tx_hash: 'order_by',
+  },
+  locked_token_distribution_pk_columns_input: {
+    id: 'bigint',
+  },
+  locked_token_distribution_select_column: true,
+  locked_token_distribution_set_input: {},
+  locked_token_distribution_stream_cursor_input: {
+    initial_value: 'locked_token_distribution_stream_cursor_value_input',
+    ordering: 'cursor_ordering',
+  },
+  locked_token_distribution_stream_cursor_value_input: {
+    distribution_json: 'jsonb',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distribution_update_column: true,
+  locked_token_distribution_updates: {
+    _set: 'locked_token_distribution_set_input',
+    where: 'locked_token_distribution_bool_exp',
+  },
   mutation_root: {
     adminUpdateUser: {
       payload: 'AdminUpdateUserInput',
@@ -1692,6 +1750,14 @@ export const AllTypesProps: Record<string, any> = {
       object: 'distributions_insert_input',
       on_conflict: 'distributions_on_conflict',
     },
+    insert_locked_token_distribution: {
+      objects: 'locked_token_distribution_insert_input',
+      on_conflict: 'locked_token_distribution_on_conflict',
+    },
+    insert_locked_token_distribution_one: {
+      object: 'locked_token_distribution_insert_input',
+      on_conflict: 'locked_token_distribution_on_conflict',
+    },
     insert_pending_vault_transactions: {
       objects: 'pending_vault_transactions_insert_input',
       on_conflict: 'pending_vault_transactions_on_conflict',
@@ -1758,6 +1824,17 @@ export const AllTypesProps: Record<string, any> = {
     },
     update_distributions_many: {
       updates: 'distributions_updates',
+    },
+    update_locked_token_distribution: {
+      _set: 'locked_token_distribution_set_input',
+      where: 'locked_token_distribution_bool_exp',
+    },
+    update_locked_token_distribution_by_pk: {
+      _set: 'locked_token_distribution_set_input',
+      pk_columns: 'locked_token_distribution_pk_columns_input',
+    },
+    update_locked_token_distribution_many: {
+      updates: 'locked_token_distribution_updates',
     },
     update_organizations: {
       _set: 'organizations_set_input',
@@ -2462,6 +2539,19 @@ export const AllTypesProps: Record<string, any> = {
       order_by: 'gift_private_order_by',
       where: 'gift_private_bool_exp',
     },
+    locked_token_distribution: {
+      distinct_on: 'locked_token_distribution_select_column',
+      order_by: 'locked_token_distribution_order_by',
+      where: 'locked_token_distribution_bool_exp',
+    },
+    locked_token_distribution_aggregate: {
+      distinct_on: 'locked_token_distribution_select_column',
+      order_by: 'locked_token_distribution_order_by',
+      where: 'locked_token_distribution_bool_exp',
+    },
+    locked_token_distribution_by_pk: {
+      id: 'bigint',
+    },
     nominees: {
       distinct_on: 'nominees_select_column',
       order_by: 'nominees_order_by',
@@ -2720,6 +2810,23 @@ export const AllTypesProps: Record<string, any> = {
     gift_private_stream: {
       cursor: 'gift_private_stream_cursor_input',
       where: 'gift_private_bool_exp',
+    },
+    locked_token_distribution: {
+      distinct_on: 'locked_token_distribution_select_column',
+      order_by: 'locked_token_distribution_order_by',
+      where: 'locked_token_distribution_bool_exp',
+    },
+    locked_token_distribution_aggregate: {
+      distinct_on: 'locked_token_distribution_select_column',
+      order_by: 'locked_token_distribution_order_by',
+      where: 'locked_token_distribution_bool_exp',
+    },
+    locked_token_distribution_by_pk: {
+      id: 'bigint',
+    },
+    locked_token_distribution_stream: {
+      cursor: 'locked_token_distribution_stream_cursor_input',
+      where: 'locked_token_distribution_bool_exp',
     },
     nominees: {
       distinct_on: 'nominees_select_column',
@@ -4484,6 +4591,87 @@ export const ReturnTypes: Record<string, any> = {
     sender: 'users',
     sender_id: 'bigint',
   },
+  locked_token_distribution: {
+    distribution_json: 'jsonb',
+    epoch: 'epochs',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+    tx_hash: 'String',
+  },
+  locked_token_distribution_aggregate: {
+    aggregate: 'locked_token_distribution_aggregate_fields',
+    nodes: 'locked_token_distribution',
+  },
+  locked_token_distribution_aggregate_fields: {
+    avg: 'locked_token_distribution_avg_fields',
+    count: 'Int',
+    max: 'locked_token_distribution_max_fields',
+    min: 'locked_token_distribution_min_fields',
+    stddev: 'locked_token_distribution_stddev_fields',
+    stddev_pop: 'locked_token_distribution_stddev_pop_fields',
+    stddev_samp: 'locked_token_distribution_stddev_samp_fields',
+    sum: 'locked_token_distribution_sum_fields',
+    var_pop: 'locked_token_distribution_var_pop_fields',
+    var_samp: 'locked_token_distribution_var_samp_fields',
+    variance: 'locked_token_distribution_variance_fields',
+  },
+  locked_token_distribution_avg_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distribution_max_fields: {
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+    tx_hash: 'String',
+  },
+  locked_token_distribution_min_fields: {
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+    tx_hash: 'String',
+  },
+  locked_token_distribution_mutation_response: {
+    affected_rows: 'Int',
+    returning: 'locked_token_distribution',
+  },
+  locked_token_distribution_stddev_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distribution_stddev_pop_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distribution_stddev_samp_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distribution_sum_fields: {
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distribution_var_pop_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distribution_var_samp_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distribution_variance_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
   mutation_root: {
     adminUpdateUser: 'UserResponse',
     allocationCsv: 'AllocationCsvResponse',
@@ -4519,6 +4707,9 @@ export const ReturnTypes: Record<string, any> = {
     insert_contributions_one: 'contributions',
     insert_distributions: 'distributions_mutation_response',
     insert_distributions_one: 'distributions',
+    insert_locked_token_distribution:
+      'locked_token_distribution_mutation_response',
+    insert_locked_token_distribution_one: 'locked_token_distribution',
     insert_pending_vault_transactions:
       'pending_vault_transactions_mutation_response',
     insert_pending_vault_transactions_one: 'pending_vault_transactions',
@@ -4540,6 +4731,11 @@ export const ReturnTypes: Record<string, any> = {
     update_distributions: 'distributions_mutation_response',
     update_distributions_by_pk: 'distributions',
     update_distributions_many: 'distributions_mutation_response',
+    update_locked_token_distribution:
+      'locked_token_distribution_mutation_response',
+    update_locked_token_distribution_by_pk: 'locked_token_distribution',
+    update_locked_token_distribution_many:
+      'locked_token_distribution_mutation_response',
     update_organizations: 'organizations_mutation_response',
     update_organizations_by_pk: 'organizations',
     update_organizations_many: 'organizations_mutation_response',
@@ -4781,6 +4977,9 @@ export const ReturnTypes: Record<string, any> = {
     epochs: 'epochs',
     epochs_by_pk: 'epochs',
     gift_private: 'gift_private',
+    locked_token_distribution: 'locked_token_distribution',
+    locked_token_distribution_aggregate: 'locked_token_distribution_aggregate',
+    locked_token_distribution_by_pk: 'locked_token_distribution',
     nominees: 'nominees',
     nominees_aggregate: 'nominees_aggregate',
     nominees_by_pk: 'nominees',
@@ -4847,6 +5046,10 @@ export const ReturnTypes: Record<string, any> = {
     epochs_stream: 'epochs',
     gift_private: 'gift_private',
     gift_private_stream: 'gift_private',
+    locked_token_distribution: 'locked_token_distribution',
+    locked_token_distribution_aggregate: 'locked_token_distribution_aggregate',
+    locked_token_distribution_by_pk: 'locked_token_distribution',
+    locked_token_distribution_stream: 'locked_token_distribution',
     nominees: 'nominees',
     nominees_aggregate: 'nominees_aggregate',
     nominees_by_pk: 'nominees',
