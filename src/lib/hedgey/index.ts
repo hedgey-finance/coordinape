@@ -1,12 +1,11 @@
 import { ERC20 } from '@coordinape/hardhat/dist/typechain';
-import { BigNumber, ContractTransaction, ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 
 import BatchNFTMinter from './BatchNFTMinter.json';
 
 export const lockedTokenDistribution = async (
   provider: ethers.providers.JsonRpcProvider,
-  chainId: string,
   token: ERC20,
   amount: BigNumber,
   hedgeyLockPeriod: number,
@@ -14,7 +13,7 @@ export const lockedTokenDistribution = async (
   decimals: number,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   deploymentInfo: Record<string, any>
-): Promise<ContractTransaction> => {
+): Promise<any> => {
   const batchNftMinterContractAddress =
     '0x99b693a65ee51a0cd8dbf1f7e361fb8dde853a01';
   const nftContractAddress = '0x400a0F8f027938D766538B8fD0CC4AAc8604e501';
