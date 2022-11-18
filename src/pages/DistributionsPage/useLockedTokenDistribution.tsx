@@ -22,7 +22,9 @@ export const useLockedTokenDistribution = () => {
     vault,
     tokenContractAddress,
     hedgeyLockPeriod,
+    hedgeyTransferable,
     epochId,
+    totalGive,
   }: any) => {
     assert(contracts, 'This network is not supported');
 
@@ -32,7 +34,6 @@ export const useLockedTokenDistribution = () => {
 
     const decimals = await token.decimals();
     const weiAmount = parseUnits(amount, decimals);
-    const deploymentInfo = contracts.getDeploymentInfo();
 
     if (vault) {
       const vaultContract = contracts.getVault(vault.vault_address);
@@ -40,10 +41,15 @@ export const useLockedTokenDistribution = () => {
       await result.wait();
     }
 
+    const balances = Object.keys(gifts).map(address => ({
+      address,
+      earnings: weiAmount.mul(gifts[address]).div(totalGive).toString(),
+    }));
+
     const response = await saveLockedTokenDistribution({
       epoch_id: epochId,
       gift_amount: amount,
-      distribution_json: gifts,
+      distribution_json: balances,
     });
 
     assert(response, 'Locked distribution was not saved.');
@@ -53,9 +59,8 @@ export const useLockedTokenDistribution = () => {
       token,
       weiAmount,
       hedgeyLockPeriod,
-      gifts,
-      decimals,
-      deploymentInfo
+      hedgeyTransferable,
+      balances
     );
     await receipt.wait();
     if (!receipt) return;

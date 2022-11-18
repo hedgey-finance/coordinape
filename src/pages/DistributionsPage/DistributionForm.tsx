@@ -322,8 +322,10 @@ export function DistributionForm({
           gifts,
           vault,
           hedgeyLockPeriod: value.hedgeyLockPeriod,
+          hedgeyTransferable: value.hedgeyTransferable,
           epochId: epoch.id,
           circleId: circle.id,
+          totalGive,
         });
       } catch (err) {
         showError(err);

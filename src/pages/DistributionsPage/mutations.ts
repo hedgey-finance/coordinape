@@ -38,18 +38,13 @@ export function useSaveLockedTokenDistribution() {
     async (
       distribution: ValueTypes['locked_token_distribution_insert_input']
     ) => {
-      // this is not a hook
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const variables = useZeusVariables({ json: 'jsonb' })({
-        json: distribution?.distribution_json,
-      });
       const { insert_locked_token_distribution_one } = await client.mutate({
         insert_locked_token_distribution_one: [
           {
             object: {
               epoch_id: distribution.epoch_id,
               gift_amount: distribution.gift_amount,
-              distribution_json: variables.$('json'),
+              distribution_json: distribution.distribution_json,
             },
           },
           { id: true },

@@ -1,6 +1,5 @@
 import { ERC20 } from '@coordinape/hardhat/dist/typechain';
 import { BigNumber, ethers } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
 
 import BatchNFTMinter from './BatchNFTMinter.json';
 
@@ -9,14 +8,15 @@ export const lockedTokenDistribution = async (
   token: ERC20,
   amount: BigNumber,
   hedgeyLockPeriod: number,
-  gifts: any,
-  decimals: number,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  deploymentInfo: Record<string, any>
+  hedgeyTransferable: string,
+  balances: { address: string; earnings: string }[]
 ): Promise<any> => {
   const batchNftMinterContractAddress =
     '0x99b693a65ee51a0cd8dbf1f7e361fb8dde853a01';
-  const nftContractAddress = '0x400a0F8f027938D766538B8fD0CC4AAc8604e501';
+  const transferrableNFTContractAddress =
+    '0x400a0F8f027938D766538B8fD0CC4AAc8604e501';
+  const nonTransferrableNftContractAddress =
+    '0xcf744802f65d2030B1168526F8F2a8d0703BaC00';
 
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
@@ -49,15 +49,17 @@ export const lockedTokenDistribution = async (
     unlockDate.getTime() / 1000
   ).toString();
 
-  for (const address of Object.keys(gifts)) {
-    const amount = parseUnits(gifts[address].toString(), decimals);
-    holders.push(address);
-    amounts.push(amount.toString());
+  balances.forEach(balance => {
+    const amount = balance.earnings;
+    holders.push(balance.address);
+    amounts.push(amount);
     unlockDates.push(unlockSecondsSinceEpoch);
-  }
+  });
 
   return batchNFTMinter.batchMint(
-    nftContractAddress,
+    hedgeyTransferable === '1'
+      ? transferrableNFTContractAddress
+      : nonTransferrableNftContractAddress,
     holders,
     tokenAddress,
     amounts,
