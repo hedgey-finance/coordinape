@@ -211,11 +211,13 @@ export const createCircle = async (
             created_at: true,
             updated_at: true,
             organization_id: true,
+            show_pending_gives: true,
             organization: {
               id: true,
               name: true,
               created_at: true,
               updated_at: true,
+              sample: true,
             },
             auto_opt_out: true,
             fixed_payment_token_type: true,
