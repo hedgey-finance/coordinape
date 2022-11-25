@@ -513,7 +513,6 @@ custom_types:
             schema: discord
           source: default
           type: object
-
     - name: CreateSampleCircleResponse
       relationships:
         - field_mapping:
