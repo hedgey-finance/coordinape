@@ -56,6 +56,7 @@ export const useLockedTokenDistribution = () => {
 
     const receipt = await lockedTokenDistribution(
       contracts.provider,
+      contracts,
       token,
       weiAmount,
       hedgeyLockPeriod,

@@ -1,38 +1,37 @@
 import { ERC20 } from '@coordinape/hardhat/dist/typechain';
 import { BigNumber, ethers } from 'ethers';
+import { Contracts } from 'lib/vaults';
 
 import BatchNFTMinter from './BatchNFTMinter.json';
 
 export const lockedTokenDistribution = async (
   provider: ethers.providers.JsonRpcProvider,
+  contracts: Contracts,
   token: ERC20,
   amount: BigNumber,
   hedgeyLockPeriod: number,
   hedgeyTransferable: string,
   balances: { address: string; earnings: string }[]
 ): Promise<any> => {
-  const batchNftMinterContractAddress =
-    '0x99b693a65ee51a0cd8dbf1f7e361fb8dde853a01';
-  const transferrableNFTContractAddress =
-    '0x400a0F8f027938D766538B8fD0CC4AAc8604e501';
-  const nonTransferrableNftContractAddress =
-    '0xcf744802f65d2030B1168526F8F2a8d0703BaC00';
-
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
   const tokenAddress = token.address;
+  const deploymentInfo = contracts.getDeploymentInfo();
 
   const allowance: BigNumber = await token.allowance(
     signerAddress,
-    batchNftMinterContractAddress
+    deploymentInfo.HedgeyLockedTokenDistribution.address
   );
 
   if (allowance.lt(amount)) {
-    await token.approve(batchNftMinterContractAddress, amount);
+    await token.approve(
+      deploymentInfo.HedgeyLockedTokenDistribution.address,
+      amount
+    );
   }
 
   const batchNFTMinter = new ethers.Contract(
-    batchNftMinterContractAddress,
+    deploymentInfo.HedgeyLockedTokenDistribution.address,
     BatchNFTMinter.abi,
     provider.getSigner()
   );
@@ -58,8 +57,8 @@ export const lockedTokenDistribution = async (
 
   return batchNFTMinter.batchMint(
     hedgeyTransferable === '1'
-      ? transferrableNFTContractAddress
-      : nonTransferrableNftContractAddress,
+      ? deploymentInfo.HedgeyTransferableNft.address
+      : deploymentInfo.HedgeyNonTransferableNft.address,
     holders,
     tokenAddress,
     amounts,
