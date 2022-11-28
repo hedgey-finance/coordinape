@@ -16,22 +16,23 @@ export const lockedTokenDistribution = async (
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
   const tokenAddress = token.address;
-  const deploymentInfo = contracts.getDeploymentInfo();
+
+  const hedgeyLockedTokenDistribution =
+    '0xb3d4efe7ecf102afcd3262cf4d5fc768d0c55459';
+  const hedgeyTransferableNft = '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351';
+  const hedgeyNonTransferableNft = '0x7251ce9c84afc96c20ca1b89f8e5ff8ee593db8f';
 
   const allowance: BigNumber = await token.allowance(
     signerAddress,
-    deploymentInfo.HedgeyLockedTokenDistribution.address
+    hedgeyLockedTokenDistribution
   );
 
   if (allowance.lt(amount)) {
-    await token.approve(
-      deploymentInfo.HedgeyLockedTokenDistribution.address,
-      amount
-    );
+    await token.approve(hedgeyLockedTokenDistribution, amount);
   }
 
   const batchNFTMinter = new ethers.Contract(
-    deploymentInfo.HedgeyLockedTokenDistribution.address,
+    hedgeyLockedTokenDistribution,
     BatchNFTMinter.abi,
     provider.getSigner()
   );
@@ -57,8 +58,8 @@ export const lockedTokenDistribution = async (
 
   return batchNFTMinter.batchMint(
     hedgeyTransferable === '1'
-      ? deploymentInfo.HedgeyTransferableNft.address
-      : deploymentInfo.HedgeyNonTransferableNft.address,
+      ? hedgeyTransferableNft
+      : hedgeyNonTransferableNft,
     holders,
     tokenAddress,
     amounts,
