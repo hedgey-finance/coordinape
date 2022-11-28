@@ -7154,8 +7154,8 @@ export type ValueTypes = {
     _neq?: ValueTypes['jsonb'] | undefined | null;
     _nin?: Array<ValueTypes['jsonb']> | undefined | null;
   };
-  /** columns and relationships of "locked_token_distribution" */
-  ['locked_token_distribution']: AliasType<{
+  /** columns and relationships of "locked_token_distributions" */
+  ['locked_token_distributions']: AliasType<{
     created_at?: boolean | `@${string}`;
     distribution_json?: [
       {
@@ -7170,58 +7170,60 @@ export type ValueTypes = {
     id?: boolean | `@${string}`;
     tx_hash?: boolean | `@${string}`;
     updated_at?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
-  /** aggregated selection of "locked_token_distribution" */
-  ['locked_token_distribution_aggregate']: AliasType<{
-    aggregate?: ValueTypes['locked_token_distribution_aggregate_fields'];
-    nodes?: ValueTypes['locked_token_distribution'];
+  /** aggregated selection of "locked_token_distributions" */
+  ['locked_token_distributions_aggregate']: AliasType<{
+    aggregate?: ValueTypes['locked_token_distributions_aggregate_fields'];
+    nodes?: ValueTypes['locked_token_distributions'];
     __typename?: boolean | `@${string}`;
   }>;
-  /** aggregate fields of "locked_token_distribution" */
-  ['locked_token_distribution_aggregate_fields']: AliasType<{
-    avg?: ValueTypes['locked_token_distribution_avg_fields'];
+  /** aggregate fields of "locked_token_distributions" */
+  ['locked_token_distributions_aggregate_fields']: AliasType<{
+    avg?: ValueTypes['locked_token_distributions_avg_fields'];
     count?: [
       {
         columns?:
-          | Array<ValueTypes['locked_token_distribution_select_column']>
+          | Array<ValueTypes['locked_token_distributions_select_column']>
           | undefined
           | null;
         distinct?: boolean | undefined | null;
       },
       boolean | `@${string}`
     ];
-    max?: ValueTypes['locked_token_distribution_max_fields'];
-    min?: ValueTypes['locked_token_distribution_min_fields'];
-    stddev?: ValueTypes['locked_token_distribution_stddev_fields'];
-    stddev_pop?: ValueTypes['locked_token_distribution_stddev_pop_fields'];
-    stddev_samp?: ValueTypes['locked_token_distribution_stddev_samp_fields'];
-    sum?: ValueTypes['locked_token_distribution_sum_fields'];
-    var_pop?: ValueTypes['locked_token_distribution_var_pop_fields'];
-    var_samp?: ValueTypes['locked_token_distribution_var_samp_fields'];
-    variance?: ValueTypes['locked_token_distribution_variance_fields'];
+    max?: ValueTypes['locked_token_distributions_max_fields'];
+    min?: ValueTypes['locked_token_distributions_min_fields'];
+    stddev?: ValueTypes['locked_token_distributions_stddev_fields'];
+    stddev_pop?: ValueTypes['locked_token_distributions_stddev_pop_fields'];
+    stddev_samp?: ValueTypes['locked_token_distributions_stddev_samp_fields'];
+    sum?: ValueTypes['locked_token_distributions_sum_fields'];
+    var_pop?: ValueTypes['locked_token_distributions_var_pop_fields'];
+    var_samp?: ValueTypes['locked_token_distributions_var_samp_fields'];
+    variance?: ValueTypes['locked_token_distributions_variance_fields'];
     __typename?: boolean | `@${string}`;
   }>;
   /** append existing jsonb value of filtered columns with new jsonb value */
-  ['locked_token_distribution_append_input']: {
+  ['locked_token_distributions_append_input']: {
     distribution_json?: ValueTypes['jsonb'] | undefined | null;
   };
   /** aggregate avg on columns */
-  ['locked_token_distribution_avg_fields']: AliasType<{
+  ['locked_token_distributions_avg_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
-  /** Boolean expression to filter rows from the table "locked_token_distribution". All fields are combined with a logical 'AND'. */
-  ['locked_token_distribution_bool_exp']: {
+  /** Boolean expression to filter rows from the table "locked_token_distributions". All fields are combined with a logical 'AND'. */
+  ['locked_token_distributions_bool_exp']: {
     _and?:
-      | Array<ValueTypes['locked_token_distribution_bool_exp']>
+      | Array<ValueTypes['locked_token_distributions_bool_exp']>
       | undefined
       | null;
-    _not?: ValueTypes['locked_token_distribution_bool_exp'] | undefined | null;
+    _not?: ValueTypes['locked_token_distributions_bool_exp'] | undefined | null;
     _or?:
-      | Array<ValueTypes['locked_token_distribution_bool_exp']>
+      | Array<ValueTypes['locked_token_distributions_bool_exp']>
       | undefined
       | null;
     created_at?: ValueTypes['timestamptz_comparison_exp'] | undefined | null;
@@ -7232,29 +7234,31 @@ export type ValueTypes = {
     id?: ValueTypes['bigint_comparison_exp'] | undefined | null;
     tx_hash?: ValueTypes['String_comparison_exp'] | undefined | null;
     updated_at?: ValueTypes['timestamptz_comparison_exp'] | undefined | null;
+    updated_by?: ValueTypes['bigint_comparison_exp'] | undefined | null;
   };
-  /** unique or primary key constraints on table "locked_token_distribution" */
-  ['locked_token_distribution_constraint']: locked_token_distribution_constraint;
+  /** unique or primary key constraints on table "locked_token_distributions" */
+  ['locked_token_distributions_constraint']: locked_token_distributions_constraint;
   /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-  ['locked_token_distribution_delete_at_path_input']: {
+  ['locked_token_distributions_delete_at_path_input']: {
     distribution_json?: Array<string> | undefined | null;
   };
   /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-  ['locked_token_distribution_delete_elem_input']: {
+  ['locked_token_distributions_delete_elem_input']: {
     distribution_json?: number | undefined | null;
   };
   /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-  ['locked_token_distribution_delete_key_input']: {
+  ['locked_token_distributions_delete_key_input']: {
     distribution_json?: string | undefined | null;
   };
-  /** input type for incrementing numeric columns in table "locked_token_distribution" */
-  ['locked_token_distribution_inc_input']: {
+  /** input type for incrementing numeric columns in table "locked_token_distributions" */
+  ['locked_token_distributions_inc_input']: {
     epoch_id?: ValueTypes['bigint'] | undefined | null;
     gift_amount?: ValueTypes['numeric'] | undefined | null;
     id?: ValueTypes['bigint'] | undefined | null;
+    updated_by?: ValueTypes['bigint'] | undefined | null;
   };
-  /** input type for inserting data into table "locked_token_distribution" */
-  ['locked_token_distribution_insert_input']: {
+  /** input type for inserting data into table "locked_token_distributions" */
+  ['locked_token_distributions_insert_input']: {
     created_at?: ValueTypes['timestamptz'] | undefined | null;
     distribution_json?: ValueTypes['jsonb'] | undefined | null;
     epoch?: ValueTypes['epochs_obj_rel_insert_input'] | undefined | null;
@@ -7263,45 +7267,51 @@ export type ValueTypes = {
     id?: ValueTypes['bigint'] | undefined | null;
     tx_hash?: string | undefined | null;
     updated_at?: ValueTypes['timestamptz'] | undefined | null;
+    updated_by?: ValueTypes['bigint'] | undefined | null;
   };
   /** aggregate max on columns */
-  ['locked_token_distribution_max_fields']: AliasType<{
+  ['locked_token_distributions_max_fields']: AliasType<{
     created_at?: boolean | `@${string}`;
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
     tx_hash?: boolean | `@${string}`;
     updated_at?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** aggregate min on columns */
-  ['locked_token_distribution_min_fields']: AliasType<{
+  ['locked_token_distributions_min_fields']: AliasType<{
     created_at?: boolean | `@${string}`;
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
     tx_hash?: boolean | `@${string}`;
     updated_at?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
-  /** response of any mutation on the table "locked_token_distribution" */
-  ['locked_token_distribution_mutation_response']: AliasType<{
+  /** response of any mutation on the table "locked_token_distributions" */
+  ['locked_token_distributions_mutation_response']: AliasType<{
     /** number of rows affected by the mutation */
     affected_rows?: boolean | `@${string}`;
     /** data from the rows affected by the mutation */
-    returning?: ValueTypes['locked_token_distribution'];
+    returning?: ValueTypes['locked_token_distributions'];
     __typename?: boolean | `@${string}`;
   }>;
-  /** on_conflict condition type for table "locked_token_distribution" */
-  ['locked_token_distribution_on_conflict']: {
-    constraint: ValueTypes['locked_token_distribution_constraint'];
+  /** on_conflict condition type for table "locked_token_distributions" */
+  ['locked_token_distributions_on_conflict']: {
+    constraint: ValueTypes['locked_token_distributions_constraint'];
     update_columns: Array<
-      ValueTypes['locked_token_distribution_update_column']
+      ValueTypes['locked_token_distributions_update_column']
     >;
-    where?: ValueTypes['locked_token_distribution_bool_exp'] | undefined | null;
+    where?:
+      | ValueTypes['locked_token_distributions_bool_exp']
+      | undefined
+      | null;
   };
-  /** Ordering options when selecting data from "locked_token_distribution". */
-  ['locked_token_distribution_order_by']: {
+  /** Ordering options when selecting data from "locked_token_distributions". */
+  ['locked_token_distributions_order_by']: {
     created_at?: ValueTypes['order_by'] | undefined | null;
     distribution_json?: ValueTypes['order_by'] | undefined | null;
     epoch?: ValueTypes['epochs_order_by'] | undefined | null;
@@ -7310,19 +7320,20 @@ export type ValueTypes = {
     id?: ValueTypes['order_by'] | undefined | null;
     tx_hash?: ValueTypes['order_by'] | undefined | null;
     updated_at?: ValueTypes['order_by'] | undefined | null;
+    updated_by?: ValueTypes['order_by'] | undefined | null;
   };
-  /** primary key columns input for table: locked_token_distribution */
-  ['locked_token_distribution_pk_columns_input']: {
+  /** primary key columns input for table: locked_token_distributions */
+  ['locked_token_distributions_pk_columns_input']: {
     id: ValueTypes['bigint'];
   };
   /** prepend existing jsonb value of filtered columns with new jsonb value */
-  ['locked_token_distribution_prepend_input']: {
+  ['locked_token_distributions_prepend_input']: {
     distribution_json?: ValueTypes['jsonb'] | undefined | null;
   };
-  /** select columns of table "locked_token_distribution" */
-  ['locked_token_distribution_select_column']: locked_token_distribution_select_column;
-  /** input type for updating data in table "locked_token_distribution" */
-  ['locked_token_distribution_set_input']: {
+  /** select columns of table "locked_token_distributions" */
+  ['locked_token_distributions_select_column']: locked_token_distributions_select_column;
+  /** input type for updating data in table "locked_token_distributions" */
+  ['locked_token_distributions_set_input']: {
     created_at?: ValueTypes['timestamptz'] | undefined | null;
     distribution_json?: ValueTypes['jsonb'] | undefined | null;
     epoch_id?: ValueTypes['bigint'] | undefined | null;
@@ -7330,37 +7341,41 @@ export type ValueTypes = {
     id?: ValueTypes['bigint'] | undefined | null;
     tx_hash?: string | undefined | null;
     updated_at?: ValueTypes['timestamptz'] | undefined | null;
+    updated_by?: ValueTypes['bigint'] | undefined | null;
   };
   /** aggregate stddev on columns */
-  ['locked_token_distribution_stddev_fields']: AliasType<{
+  ['locked_token_distributions_stddev_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** aggregate stddev_pop on columns */
-  ['locked_token_distribution_stddev_pop_fields']: AliasType<{
+  ['locked_token_distributions_stddev_pop_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** aggregate stddev_samp on columns */
-  ['locked_token_distribution_stddev_samp_fields']: AliasType<{
+  ['locked_token_distributions_stddev_samp_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
-  /** Streaming cursor of the table "locked_token_distribution" */
-  ['locked_token_distribution_stream_cursor_input']: {
+  /** Streaming cursor of the table "locked_token_distributions" */
+  ['locked_token_distributions_stream_cursor_input']: {
     /** Stream column input with initial value */
-    initial_value: ValueTypes['locked_token_distribution_stream_cursor_value_input'];
+    initial_value: ValueTypes['locked_token_distributions_stream_cursor_value_input'];
     /** cursor ordering */
     ordering?: ValueTypes['cursor_ordering'] | undefined | null;
   };
   /** Initial value of the column from where the streaming should start */
-  ['locked_token_distribution_stream_cursor_value_input']: {
+  ['locked_token_distributions_stream_cursor_value_input']: {
     created_at?: ValueTypes['timestamptz'] | undefined | null;
     distribution_json?: ValueTypes['jsonb'] | undefined | null;
     epoch_id?: ValueTypes['bigint'] | undefined | null;
@@ -7368,67 +7383,78 @@ export type ValueTypes = {
     id?: ValueTypes['bigint'] | undefined | null;
     tx_hash?: string | undefined | null;
     updated_at?: ValueTypes['timestamptz'] | undefined | null;
+    updated_by?: ValueTypes['bigint'] | undefined | null;
   };
   /** aggregate sum on columns */
-  ['locked_token_distribution_sum_fields']: AliasType<{
+  ['locked_token_distributions_sum_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
-  /** update columns of table "locked_token_distribution" */
-  ['locked_token_distribution_update_column']: locked_token_distribution_update_column;
-  ['locked_token_distribution_updates']: {
+  /** update columns of table "locked_token_distributions" */
+  ['locked_token_distributions_update_column']: locked_token_distributions_update_column;
+  ['locked_token_distributions_updates']: {
     /** append existing jsonb value of filtered columns with new jsonb value */
     _append?:
-      | ValueTypes['locked_token_distribution_append_input']
+      | ValueTypes['locked_token_distributions_append_input']
       | undefined
       | null;
     /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
     _delete_at_path?:
-      | ValueTypes['locked_token_distribution_delete_at_path_input']
+      | ValueTypes['locked_token_distributions_delete_at_path_input']
       | undefined
       | null;
     /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
     _delete_elem?:
-      | ValueTypes['locked_token_distribution_delete_elem_input']
+      | ValueTypes['locked_token_distributions_delete_elem_input']
       | undefined
       | null;
     /** delete key/value pair or string element. key/value pairs are matched based on their key value */
     _delete_key?:
-      | ValueTypes['locked_token_distribution_delete_key_input']
+      | ValueTypes['locked_token_distributions_delete_key_input']
       | undefined
       | null;
     /** increments the numeric columns with given value of the filtered values */
-    _inc?: ValueTypes['locked_token_distribution_inc_input'] | undefined | null;
+    _inc?:
+      | ValueTypes['locked_token_distributions_inc_input']
+      | undefined
+      | null;
     /** prepend existing jsonb value of filtered columns with new jsonb value */
     _prepend?:
-      | ValueTypes['locked_token_distribution_prepend_input']
+      | ValueTypes['locked_token_distributions_prepend_input']
       | undefined
       | null;
     /** sets the columns of the filtered rows to the given values */
-    _set?: ValueTypes['locked_token_distribution_set_input'] | undefined | null;
-    where: ValueTypes['locked_token_distribution_bool_exp'];
+    _set?:
+      | ValueTypes['locked_token_distributions_set_input']
+      | undefined
+      | null;
+    where: ValueTypes['locked_token_distributions_bool_exp'];
   };
   /** aggregate var_pop on columns */
-  ['locked_token_distribution_var_pop_fields']: AliasType<{
+  ['locked_token_distributions_var_pop_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** aggregate var_samp on columns */
-  ['locked_token_distribution_var_samp_fields']: AliasType<{
+  ['locked_token_distributions_var_samp_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** aggregate variance on columns */
-  ['locked_token_distribution_variance_fields']: AliasType<{
+  ['locked_token_distributions_variance_fields']: AliasType<{
     epoch_id?: boolean | `@${string}`;
     gift_amount?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    updated_by?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** mutation root */
@@ -7649,16 +7675,16 @@ export type ValueTypes = {
       { id: number },
       ValueTypes['interaction_events']
     ];
-    delete_locked_token_distribution?: [
+    delete_locked_token_distributions?: [
       {
         /** filter the rows which have to be deleted */
-        where: ValueTypes['locked_token_distribution_bool_exp'];
+        where: ValueTypes['locked_token_distributions_bool_exp'];
       },
-      ValueTypes['locked_token_distribution_mutation_response']
+      ValueTypes['locked_token_distributions_mutation_response']
     ];
-    delete_locked_token_distribution_by_pk?: [
+    delete_locked_token_distributions_by_pk?: [
       { id: ValueTypes['bigint'] },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
     delete_nominees?: [
       {
@@ -8142,29 +8168,29 @@ export type ValueTypes = {
       },
       ValueTypes['interaction_events']
     ];
-    insert_locked_token_distribution?: [
+    insert_locked_token_distributions?: [
       {
         /** the rows to be inserted */
         objects: Array<
-          ValueTypes['locked_token_distribution_insert_input']
+          ValueTypes['locked_token_distributions_insert_input']
         > /** upsert condition */;
         on_conflict?:
-          | ValueTypes['locked_token_distribution_on_conflict']
+          | ValueTypes['locked_token_distributions_on_conflict']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution_mutation_response']
+      ValueTypes['locked_token_distributions_mutation_response']
     ];
-    insert_locked_token_distribution_one?: [
+    insert_locked_token_distributions_one?: [
       {
         /** the row to be inserted */
-        object: ValueTypes['locked_token_distribution_insert_input'] /** upsert condition */;
+        object: ValueTypes['locked_token_distributions_insert_input'] /** upsert condition */;
         on_conflict?:
-          | ValueTypes['locked_token_distribution_on_conflict']
+          | ValueTypes['locked_token_distributions_on_conflict']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
     insert_nominees?: [
       {
@@ -9087,82 +9113,82 @@ export type ValueTypes = {
       },
       ValueTypes['interaction_events_mutation_response']
     ];
-    update_locked_token_distribution?: [
+    update_locked_token_distributions?: [
       {
         /** append existing jsonb value of filtered columns with new jsonb value */
         _append?:
-          | ValueTypes['locked_token_distribution_append_input']
+          | ValueTypes['locked_token_distributions_append_input']
           | undefined
           | null /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */;
         _delete_at_path?:
-          | ValueTypes['locked_token_distribution_delete_at_path_input']
+          | ValueTypes['locked_token_distributions_delete_at_path_input']
           | undefined
           | null /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */;
         _delete_elem?:
-          | ValueTypes['locked_token_distribution_delete_elem_input']
+          | ValueTypes['locked_token_distributions_delete_elem_input']
           | undefined
           | null /** delete key/value pair or string element. key/value pairs are matched based on their key value */;
         _delete_key?:
-          | ValueTypes['locked_token_distribution_delete_key_input']
+          | ValueTypes['locked_token_distributions_delete_key_input']
           | undefined
           | null /** increments the numeric columns with given value of the filtered values */;
         _inc?:
-          | ValueTypes['locked_token_distribution_inc_input']
+          | ValueTypes['locked_token_distributions_inc_input']
           | undefined
           | null /** prepend existing jsonb value of filtered columns with new jsonb value */;
         _prepend?:
-          | ValueTypes['locked_token_distribution_prepend_input']
+          | ValueTypes['locked_token_distributions_prepend_input']
           | undefined
           | null /** sets the columns of the filtered rows to the given values */;
         _set?:
-          | ValueTypes['locked_token_distribution_set_input']
+          | ValueTypes['locked_token_distributions_set_input']
           | undefined
           | null /** filter the rows which have to be updated */;
-        where: ValueTypes['locked_token_distribution_bool_exp'];
+        where: ValueTypes['locked_token_distributions_bool_exp'];
       },
-      ValueTypes['locked_token_distribution_mutation_response']
+      ValueTypes['locked_token_distributions_mutation_response']
     ];
-    update_locked_token_distribution_by_pk?: [
+    update_locked_token_distributions_by_pk?: [
       {
         /** append existing jsonb value of filtered columns with new jsonb value */
         _append?:
-          | ValueTypes['locked_token_distribution_append_input']
+          | ValueTypes['locked_token_distributions_append_input']
           | undefined
           | null /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */;
         _delete_at_path?:
-          | ValueTypes['locked_token_distribution_delete_at_path_input']
+          | ValueTypes['locked_token_distributions_delete_at_path_input']
           | undefined
           | null /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */;
         _delete_elem?:
-          | ValueTypes['locked_token_distribution_delete_elem_input']
+          | ValueTypes['locked_token_distributions_delete_elem_input']
           | undefined
           | null /** delete key/value pair or string element. key/value pairs are matched based on their key value */;
         _delete_key?:
-          | ValueTypes['locked_token_distribution_delete_key_input']
+          | ValueTypes['locked_token_distributions_delete_key_input']
           | undefined
           | null /** increments the numeric columns with given value of the filtered values */;
         _inc?:
-          | ValueTypes['locked_token_distribution_inc_input']
+          | ValueTypes['locked_token_distributions_inc_input']
           | undefined
           | null /** prepend existing jsonb value of filtered columns with new jsonb value */;
         _prepend?:
-          | ValueTypes['locked_token_distribution_prepend_input']
+          | ValueTypes['locked_token_distributions_prepend_input']
           | undefined
           | null /** sets the columns of the filtered rows to the given values */;
         _set?:
-          | ValueTypes['locked_token_distribution_set_input']
+          | ValueTypes['locked_token_distributions_set_input']
           | undefined
           | null;
-        pk_columns: ValueTypes['locked_token_distribution_pk_columns_input'];
+        pk_columns: ValueTypes['locked_token_distributions_pk_columns_input'];
       },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
-    update_locked_token_distribution_many?: [
+    update_locked_token_distributions_many?: [
       {
         /** updates to execute, in order */
-        updates: Array<ValueTypes['locked_token_distribution_updates']>;
+        updates: Array<ValueTypes['locked_token_distributions_updates']>;
       },
-      ValueTypes['locked_token_distribution_mutation_response']
+      ValueTypes['locked_token_distributions_mutation_response']
     ];
     update_nominees?: [
       {
@@ -12969,11 +12995,11 @@ export type ValueTypes = {
       { id: number },
       ValueTypes['interaction_events']
     ];
-    locked_token_distribution?: [
+    locked_token_distributions?: [
       {
         /** distinct select on columns */
         distinct_on?:
-          | Array<ValueTypes['locked_token_distribution_select_column']>
+          | Array<ValueTypes['locked_token_distributions_select_column']>
           | undefined
           | null /** limit the number of rows returned */;
         limit?:
@@ -12985,21 +13011,21 @@ export type ValueTypes = {
           | undefined
           | null /** sort the rows by one or more columns */;
         order_by?:
-          | Array<ValueTypes['locked_token_distribution_order_by']>
+          | Array<ValueTypes['locked_token_distributions_order_by']>
           | undefined
           | null /** filter the rows returned */;
         where?:
-          | ValueTypes['locked_token_distribution_bool_exp']
+          | ValueTypes['locked_token_distributions_bool_exp']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
-    locked_token_distribution_aggregate?: [
+    locked_token_distributions_aggregate?: [
       {
         /** distinct select on columns */
         distinct_on?:
-          | Array<ValueTypes['locked_token_distribution_select_column']>
+          | Array<ValueTypes['locked_token_distributions_select_column']>
           | undefined
           | null /** limit the number of rows returned */;
         limit?:
@@ -13011,19 +13037,19 @@ export type ValueTypes = {
           | undefined
           | null /** sort the rows by one or more columns */;
         order_by?:
-          | Array<ValueTypes['locked_token_distribution_order_by']>
+          | Array<ValueTypes['locked_token_distributions_order_by']>
           | undefined
           | null /** filter the rows returned */;
         where?:
-          | ValueTypes['locked_token_distribution_bool_exp']
+          | ValueTypes['locked_token_distributions_bool_exp']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution_aggregate']
+      ValueTypes['locked_token_distributions_aggregate']
     ];
-    locked_token_distribution_by_pk?: [
+    locked_token_distributions_by_pk?: [
       { id: ValueTypes['bigint'] },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
     nominees?: [
       {
@@ -13329,10 +13355,6 @@ export type ValueTypes = {
     personal_access_tokens_by_pk?: [
       { id: ValueTypes['bigint'] },
       ValueTypes['personal_access_tokens']
-    ];
-    price_per_share?: [
-      { chain_id: number; token_address?: string | undefined | null },
-      boolean | `@${string}`
     ];
     profiles?: [
       {
@@ -14723,11 +14745,11 @@ export type ValueTypes = {
       },
       ValueTypes['interaction_events']
     ];
-    locked_token_distribution?: [
+    locked_token_distributions?: [
       {
         /** distinct select on columns */
         distinct_on?:
-          | Array<ValueTypes['locked_token_distribution_select_column']>
+          | Array<ValueTypes['locked_token_distributions_select_column']>
           | undefined
           | null /** limit the number of rows returned */;
         limit?:
@@ -14739,21 +14761,21 @@ export type ValueTypes = {
           | undefined
           | null /** sort the rows by one or more columns */;
         order_by?:
-          | Array<ValueTypes['locked_token_distribution_order_by']>
+          | Array<ValueTypes['locked_token_distributions_order_by']>
           | undefined
           | null /** filter the rows returned */;
         where?:
-          | ValueTypes['locked_token_distribution_bool_exp']
+          | ValueTypes['locked_token_distributions_bool_exp']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
-    locked_token_distribution_aggregate?: [
+    locked_token_distributions_aggregate?: [
       {
         /** distinct select on columns */
         distinct_on?:
-          | Array<ValueTypes['locked_token_distribution_select_column']>
+          | Array<ValueTypes['locked_token_distributions_select_column']>
           | undefined
           | null /** limit the number of rows returned */;
         limit?:
@@ -14765,35 +14787,35 @@ export type ValueTypes = {
           | undefined
           | null /** sort the rows by one or more columns */;
         order_by?:
-          | Array<ValueTypes['locked_token_distribution_order_by']>
+          | Array<ValueTypes['locked_token_distributions_order_by']>
           | undefined
           | null /** filter the rows returned */;
         where?:
-          | ValueTypes['locked_token_distribution_bool_exp']
+          | ValueTypes['locked_token_distributions_bool_exp']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution_aggregate']
+      ValueTypes['locked_token_distributions_aggregate']
     ];
-    locked_token_distribution_by_pk?: [
+    locked_token_distributions_by_pk?: [
       { id: ValueTypes['bigint'] },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
-    locked_token_distribution_stream?: [
+    locked_token_distributions_stream?: [
       {
         /** maximum number of rows returned in a single batch */
         batch_size: number /** cursor to stream the results returned by the query */;
         cursor: Array<
-          | ValueTypes['locked_token_distribution_stream_cursor_input']
+          | ValueTypes['locked_token_distributions_stream_cursor_input']
           | undefined
           | null
         > /** filter the rows returned */;
         where?:
-          | ValueTypes['locked_token_distribution_bool_exp']
+          | ValueTypes['locked_token_distributions_bool_exp']
           | undefined
           | null;
       },
-      ValueTypes['locked_token_distribution']
+      ValueTypes['locked_token_distributions']
     ];
     nominees?: [
       {
@@ -18281,7 +18303,6 @@ export type ValueTypes = {
     org_id?: boolean | `@${string}`;
     /** An object relationship */
     organization?: ValueTypes['organizations'];
-    price_per_share?: boolean | `@${string}`;
     /** An object relationship */
     profile?: ValueTypes['profiles'];
     simple_token_address?: boolean | `@${string}`;
@@ -21822,8 +21843,8 @@ export type ModelTypes = {
   ['jsonb_cast_exp']: GraphQLTypes['jsonb_cast_exp'];
   /** Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'. */
   ['jsonb_comparison_exp']: GraphQLTypes['jsonb_comparison_exp'];
-  /** columns and relationships of "locked_token_distribution" */
-  ['locked_token_distribution']: {
+  /** columns and relationships of "locked_token_distributions" */
+  ['locked_token_distributions']: {
     created_at: GraphQLTypes['timestamptz'];
     distribution_json: GraphQLTypes['jsonb'];
     /** An object relationship */
@@ -21831,149 +21852,160 @@ export type ModelTypes = {
     epoch_id: GraphQLTypes['bigint'];
     gift_amount: GraphQLTypes['numeric'];
     id: GraphQLTypes['bigint'];
-    tx_hash: string;
+    tx_hash?: string | undefined;
     updated_at: GraphQLTypes['timestamptz'];
+    updated_by: GraphQLTypes['bigint'];
   };
-  /** aggregated selection of "locked_token_distribution" */
-  ['locked_token_distribution_aggregate']: {
+  /** aggregated selection of "locked_token_distributions" */
+  ['locked_token_distributions_aggregate']: {
     aggregate?:
-      | GraphQLTypes['locked_token_distribution_aggregate_fields']
+      | GraphQLTypes['locked_token_distributions_aggregate_fields']
       | undefined;
-    nodes: Array<GraphQLTypes['locked_token_distribution']>;
+    nodes: Array<GraphQLTypes['locked_token_distributions']>;
   };
-  /** aggregate fields of "locked_token_distribution" */
-  ['locked_token_distribution_aggregate_fields']: {
-    avg?: GraphQLTypes['locked_token_distribution_avg_fields'] | undefined;
+  /** aggregate fields of "locked_token_distributions" */
+  ['locked_token_distributions_aggregate_fields']: {
+    avg?: GraphQLTypes['locked_token_distributions_avg_fields'] | undefined;
     count: number;
-    max?: GraphQLTypes['locked_token_distribution_max_fields'] | undefined;
-    min?: GraphQLTypes['locked_token_distribution_min_fields'] | undefined;
+    max?: GraphQLTypes['locked_token_distributions_max_fields'] | undefined;
+    min?: GraphQLTypes['locked_token_distributions_min_fields'] | undefined;
     stddev?:
-      | GraphQLTypes['locked_token_distribution_stddev_fields']
+      | GraphQLTypes['locked_token_distributions_stddev_fields']
       | undefined;
     stddev_pop?:
-      | GraphQLTypes['locked_token_distribution_stddev_pop_fields']
+      | GraphQLTypes['locked_token_distributions_stddev_pop_fields']
       | undefined;
     stddev_samp?:
-      | GraphQLTypes['locked_token_distribution_stddev_samp_fields']
+      | GraphQLTypes['locked_token_distributions_stddev_samp_fields']
       | undefined;
-    sum?: GraphQLTypes['locked_token_distribution_sum_fields'] | undefined;
+    sum?: GraphQLTypes['locked_token_distributions_sum_fields'] | undefined;
     var_pop?:
-      | GraphQLTypes['locked_token_distribution_var_pop_fields']
+      | GraphQLTypes['locked_token_distributions_var_pop_fields']
       | undefined;
     var_samp?:
-      | GraphQLTypes['locked_token_distribution_var_samp_fields']
+      | GraphQLTypes['locked_token_distributions_var_samp_fields']
       | undefined;
     variance?:
-      | GraphQLTypes['locked_token_distribution_variance_fields']
+      | GraphQLTypes['locked_token_distributions_variance_fields']
       | undefined;
   };
   /** append existing jsonb value of filtered columns with new jsonb value */
-  ['locked_token_distribution_append_input']: GraphQLTypes['locked_token_distribution_append_input'];
+  ['locked_token_distributions_append_input']: GraphQLTypes['locked_token_distributions_append_input'];
   /** aggregate avg on columns */
-  ['locked_token_distribution_avg_fields']: {
+  ['locked_token_distributions_avg_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
-  /** Boolean expression to filter rows from the table "locked_token_distribution". All fields are combined with a logical 'AND'. */
-  ['locked_token_distribution_bool_exp']: GraphQLTypes['locked_token_distribution_bool_exp'];
-  /** unique or primary key constraints on table "locked_token_distribution" */
-  ['locked_token_distribution_constraint']: GraphQLTypes['locked_token_distribution_constraint'];
+  /** Boolean expression to filter rows from the table "locked_token_distributions". All fields are combined with a logical 'AND'. */
+  ['locked_token_distributions_bool_exp']: GraphQLTypes['locked_token_distributions_bool_exp'];
+  /** unique or primary key constraints on table "locked_token_distributions" */
+  ['locked_token_distributions_constraint']: GraphQLTypes['locked_token_distributions_constraint'];
   /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-  ['locked_token_distribution_delete_at_path_input']: GraphQLTypes['locked_token_distribution_delete_at_path_input'];
+  ['locked_token_distributions_delete_at_path_input']: GraphQLTypes['locked_token_distributions_delete_at_path_input'];
   /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-  ['locked_token_distribution_delete_elem_input']: GraphQLTypes['locked_token_distribution_delete_elem_input'];
+  ['locked_token_distributions_delete_elem_input']: GraphQLTypes['locked_token_distributions_delete_elem_input'];
   /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-  ['locked_token_distribution_delete_key_input']: GraphQLTypes['locked_token_distribution_delete_key_input'];
-  /** input type for incrementing numeric columns in table "locked_token_distribution" */
-  ['locked_token_distribution_inc_input']: GraphQLTypes['locked_token_distribution_inc_input'];
-  /** input type for inserting data into table "locked_token_distribution" */
-  ['locked_token_distribution_insert_input']: GraphQLTypes['locked_token_distribution_insert_input'];
+  ['locked_token_distributions_delete_key_input']: GraphQLTypes['locked_token_distributions_delete_key_input'];
+  /** input type for incrementing numeric columns in table "locked_token_distributions" */
+  ['locked_token_distributions_inc_input']: GraphQLTypes['locked_token_distributions_inc_input'];
+  /** input type for inserting data into table "locked_token_distributions" */
+  ['locked_token_distributions_insert_input']: GraphQLTypes['locked_token_distributions_insert_input'];
   /** aggregate max on columns */
-  ['locked_token_distribution_max_fields']: {
+  ['locked_token_distributions_max_fields']: {
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
   /** aggregate min on columns */
-  ['locked_token_distribution_min_fields']: {
+  ['locked_token_distributions_min_fields']: {
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
-  /** response of any mutation on the table "locked_token_distribution" */
-  ['locked_token_distribution_mutation_response']: {
+  /** response of any mutation on the table "locked_token_distributions" */
+  ['locked_token_distributions_mutation_response']: {
     /** number of rows affected by the mutation */
     affected_rows: number;
     /** data from the rows affected by the mutation */
-    returning: Array<GraphQLTypes['locked_token_distribution']>;
+    returning: Array<GraphQLTypes['locked_token_distributions']>;
   };
-  /** on_conflict condition type for table "locked_token_distribution" */
-  ['locked_token_distribution_on_conflict']: GraphQLTypes['locked_token_distribution_on_conflict'];
-  /** Ordering options when selecting data from "locked_token_distribution". */
-  ['locked_token_distribution_order_by']: GraphQLTypes['locked_token_distribution_order_by'];
-  /** primary key columns input for table: locked_token_distribution */
-  ['locked_token_distribution_pk_columns_input']: GraphQLTypes['locked_token_distribution_pk_columns_input'];
+  /** on_conflict condition type for table "locked_token_distributions" */
+  ['locked_token_distributions_on_conflict']: GraphQLTypes['locked_token_distributions_on_conflict'];
+  /** Ordering options when selecting data from "locked_token_distributions". */
+  ['locked_token_distributions_order_by']: GraphQLTypes['locked_token_distributions_order_by'];
+  /** primary key columns input for table: locked_token_distributions */
+  ['locked_token_distributions_pk_columns_input']: GraphQLTypes['locked_token_distributions_pk_columns_input'];
   /** prepend existing jsonb value of filtered columns with new jsonb value */
-  ['locked_token_distribution_prepend_input']: GraphQLTypes['locked_token_distribution_prepend_input'];
-  /** select columns of table "locked_token_distribution" */
-  ['locked_token_distribution_select_column']: GraphQLTypes['locked_token_distribution_select_column'];
-  /** input type for updating data in table "locked_token_distribution" */
-  ['locked_token_distribution_set_input']: GraphQLTypes['locked_token_distribution_set_input'];
+  ['locked_token_distributions_prepend_input']: GraphQLTypes['locked_token_distributions_prepend_input'];
+  /** select columns of table "locked_token_distributions" */
+  ['locked_token_distributions_select_column']: GraphQLTypes['locked_token_distributions_select_column'];
+  /** input type for updating data in table "locked_token_distributions" */
+  ['locked_token_distributions_set_input']: GraphQLTypes['locked_token_distributions_set_input'];
   /** aggregate stddev on columns */
-  ['locked_token_distribution_stddev_fields']: {
+  ['locked_token_distributions_stddev_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate stddev_pop on columns */
-  ['locked_token_distribution_stddev_pop_fields']: {
+  ['locked_token_distributions_stddev_pop_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate stddev_samp on columns */
-  ['locked_token_distribution_stddev_samp_fields']: {
+  ['locked_token_distributions_stddev_samp_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
-  /** Streaming cursor of the table "locked_token_distribution" */
-  ['locked_token_distribution_stream_cursor_input']: GraphQLTypes['locked_token_distribution_stream_cursor_input'];
+  /** Streaming cursor of the table "locked_token_distributions" */
+  ['locked_token_distributions_stream_cursor_input']: GraphQLTypes['locked_token_distributions_stream_cursor_input'];
   /** Initial value of the column from where the streaming should start */
-  ['locked_token_distribution_stream_cursor_value_input']: GraphQLTypes['locked_token_distribution_stream_cursor_value_input'];
+  ['locked_token_distributions_stream_cursor_value_input']: GraphQLTypes['locked_token_distributions_stream_cursor_value_input'];
   /** aggregate sum on columns */
-  ['locked_token_distribution_sum_fields']: {
+  ['locked_token_distributions_sum_fields']: {
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
-  /** update columns of table "locked_token_distribution" */
-  ['locked_token_distribution_update_column']: GraphQLTypes['locked_token_distribution_update_column'];
-  ['locked_token_distribution_updates']: GraphQLTypes['locked_token_distribution_updates'];
+  /** update columns of table "locked_token_distributions" */
+  ['locked_token_distributions_update_column']: GraphQLTypes['locked_token_distributions_update_column'];
+  ['locked_token_distributions_updates']: GraphQLTypes['locked_token_distributions_updates'];
   /** aggregate var_pop on columns */
-  ['locked_token_distribution_var_pop_fields']: {
+  ['locked_token_distributions_var_pop_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate var_samp on columns */
-  ['locked_token_distribution_var_samp_fields']: {
+  ['locked_token_distributions_var_samp_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate variance on columns */
-  ['locked_token_distribution_variance_fields']: {
+  ['locked_token_distributions_variance_fields']: {
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** mutation root */
   ['mutation_root']: {
@@ -22083,13 +22115,13 @@ export type ModelTypes = {
     delete_interaction_events_by_pk?:
       | GraphQLTypes['interaction_events']
       | undefined;
-    /** delete data from the table: "locked_token_distribution" */
-    delete_locked_token_distribution?:
-      | GraphQLTypes['locked_token_distribution_mutation_response']
+    /** delete data from the table: "locked_token_distributions" */
+    delete_locked_token_distributions?:
+      | GraphQLTypes['locked_token_distributions_mutation_response']
       | undefined;
-    /** delete single row from the table: "locked_token_distribution" */
-    delete_locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** delete single row from the table: "locked_token_distributions" */
+    delete_locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
     /** delete data from the table: "nominees" */
     delete_nominees?: GraphQLTypes['nominees_mutation_response'] | undefined;
@@ -22265,13 +22297,13 @@ export type ModelTypes = {
     insert_interaction_events_one?:
       | GraphQLTypes['interaction_events']
       | undefined;
-    /** insert data into the table: "locked_token_distribution" */
-    insert_locked_token_distribution?:
-      | GraphQLTypes['locked_token_distribution_mutation_response']
+    /** insert data into the table: "locked_token_distributions" */
+    insert_locked_token_distributions?:
+      | GraphQLTypes['locked_token_distributions_mutation_response']
       | undefined;
-    /** insert a single row into the table: "locked_token_distribution" */
-    insert_locked_token_distribution_one?:
-      | GraphQLTypes['locked_token_distribution']
+    /** insert a single row into the table: "locked_token_distributions" */
+    insert_locked_token_distributions_one?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
     /** insert data into the table: "nominees" */
     insert_nominees?: GraphQLTypes['nominees_mutation_response'] | undefined;
@@ -22524,18 +22556,18 @@ export type ModelTypes = {
     update_interaction_events_many?:
       | Array<GraphQLTypes['interaction_events_mutation_response'] | undefined>
       | undefined;
-    /** update data of the table: "locked_token_distribution" */
-    update_locked_token_distribution?:
-      | GraphQLTypes['locked_token_distribution_mutation_response']
+    /** update data of the table: "locked_token_distributions" */
+    update_locked_token_distributions?:
+      | GraphQLTypes['locked_token_distributions_mutation_response']
       | undefined;
-    /** update single row of the table: "locked_token_distribution" */
-    update_locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** update single row of the table: "locked_token_distributions" */
+    update_locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
-    /** update multiples rows of table: "locked_token_distribution" */
-    update_locked_token_distribution_many?:
+    /** update multiples rows of table: "locked_token_distributions" */
+    update_locked_token_distributions_many?:
       | Array<
-          | GraphQLTypes['locked_token_distribution_mutation_response']
+          | GraphQLTypes['locked_token_distributions_mutation_response']
           | undefined
         >
       | undefined;
@@ -23921,13 +23953,15 @@ export type ModelTypes = {
     interaction_events_aggregate: GraphQLTypes['interaction_events_aggregate'];
     /** fetch data from the table: "interaction_events" using primary key columns */
     interaction_events_by_pk?: GraphQLTypes['interaction_events'] | undefined;
-    /** fetch data from the table: "locked_token_distribution" */
-    locked_token_distribution: Array<GraphQLTypes['locked_token_distribution']>;
-    /** fetch aggregated fields from the table: "locked_token_distribution" */
-    locked_token_distribution_aggregate: GraphQLTypes['locked_token_distribution_aggregate'];
-    /** fetch data from the table: "locked_token_distribution" using primary key columns */
-    locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** fetch data from the table: "locked_token_distributions" */
+    locked_token_distributions: Array<
+      GraphQLTypes['locked_token_distributions']
+    >;
+    /** fetch aggregated fields from the table: "locked_token_distributions" */
+    locked_token_distributions_aggregate: GraphQLTypes['locked_token_distributions_aggregate'];
+    /** fetch data from the table: "locked_token_distributions" using primary key columns */
+    locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
     /** An array relationship */
     nominees: Array<GraphQLTypes['nominees']>;
@@ -23969,7 +24003,6 @@ export type ModelTypes = {
     personal_access_tokens_by_pk?:
       | GraphQLTypes['personal_access_tokens']
       | undefined;
-    price_per_share: number;
     /** fetch data from the table: "profiles" */
     profiles: Array<GraphQLTypes['profiles']>;
     /** fetch aggregated fields from the table: "profiles" */
@@ -24150,17 +24183,19 @@ export type ModelTypes = {
     interaction_events_by_pk?: GraphQLTypes['interaction_events'] | undefined;
     /** fetch data from the table in a streaming manner : "interaction_events" */
     interaction_events_stream: Array<GraphQLTypes['interaction_events']>;
-    /** fetch data from the table: "locked_token_distribution" */
-    locked_token_distribution: Array<GraphQLTypes['locked_token_distribution']>;
-    /** fetch aggregated fields from the table: "locked_token_distribution" */
-    locked_token_distribution_aggregate: GraphQLTypes['locked_token_distribution_aggregate'];
-    /** fetch data from the table: "locked_token_distribution" using primary key columns */
-    locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** fetch data from the table: "locked_token_distributions" */
+    locked_token_distributions: Array<
+      GraphQLTypes['locked_token_distributions']
+    >;
+    /** fetch aggregated fields from the table: "locked_token_distributions" */
+    locked_token_distributions_aggregate: GraphQLTypes['locked_token_distributions_aggregate'];
+    /** fetch data from the table: "locked_token_distributions" using primary key columns */
+    locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
-    /** fetch data from the table in a streaming manner : "locked_token_distribution" */
-    locked_token_distribution_stream: Array<
-      GraphQLTypes['locked_token_distribution']
+    /** fetch data from the table in a streaming manner : "locked_token_distributions" */
+    locked_token_distributions_stream: Array<
+      GraphQLTypes['locked_token_distributions']
     >;
     /** An array relationship */
     nominees: Array<GraphQLTypes['nominees']>;
@@ -25278,7 +25313,6 @@ export type ModelTypes = {
     org_id: GraphQLTypes['bigint'];
     /** An object relationship */
     organization: GraphQLTypes['organizations'];
-    price_per_share: number;
     /** An object relationship */
     profile: GraphQLTypes['profiles'];
     simple_token_address: string;
@@ -31173,9 +31207,9 @@ export type GraphQLTypes = {
     _neq?: GraphQLTypes['jsonb'] | undefined;
     _nin?: Array<GraphQLTypes['jsonb']> | undefined;
   };
-  /** columns and relationships of "locked_token_distribution" */
-  ['locked_token_distribution']: {
-    __typename: 'locked_token_distribution';
+  /** columns and relationships of "locked_token_distributions" */
+  ['locked_token_distributions']: {
+    __typename: 'locked_token_distributions';
     created_at: GraphQLTypes['timestamptz'];
     distribution_json: GraphQLTypes['jsonb'];
     /** An object relationship */
@@ -31183,62 +31217,66 @@ export type GraphQLTypes = {
     epoch_id: GraphQLTypes['bigint'];
     gift_amount: GraphQLTypes['numeric'];
     id: GraphQLTypes['bigint'];
-    tx_hash: string;
+    tx_hash?: string | undefined;
     updated_at: GraphQLTypes['timestamptz'];
+    updated_by: GraphQLTypes['bigint'];
   };
-  /** aggregated selection of "locked_token_distribution" */
-  ['locked_token_distribution_aggregate']: {
-    __typename: 'locked_token_distribution_aggregate';
+  /** aggregated selection of "locked_token_distributions" */
+  ['locked_token_distributions_aggregate']: {
+    __typename: 'locked_token_distributions_aggregate';
     aggregate?:
-      | GraphQLTypes['locked_token_distribution_aggregate_fields']
+      | GraphQLTypes['locked_token_distributions_aggregate_fields']
       | undefined;
-    nodes: Array<GraphQLTypes['locked_token_distribution']>;
+    nodes: Array<GraphQLTypes['locked_token_distributions']>;
   };
-  /** aggregate fields of "locked_token_distribution" */
-  ['locked_token_distribution_aggregate_fields']: {
-    __typename: 'locked_token_distribution_aggregate_fields';
-    avg?: GraphQLTypes['locked_token_distribution_avg_fields'] | undefined;
+  /** aggregate fields of "locked_token_distributions" */
+  ['locked_token_distributions_aggregate_fields']: {
+    __typename: 'locked_token_distributions_aggregate_fields';
+    avg?: GraphQLTypes['locked_token_distributions_avg_fields'] | undefined;
     count: number;
-    max?: GraphQLTypes['locked_token_distribution_max_fields'] | undefined;
-    min?: GraphQLTypes['locked_token_distribution_min_fields'] | undefined;
+    max?: GraphQLTypes['locked_token_distributions_max_fields'] | undefined;
+    min?: GraphQLTypes['locked_token_distributions_min_fields'] | undefined;
     stddev?:
-      | GraphQLTypes['locked_token_distribution_stddev_fields']
+      | GraphQLTypes['locked_token_distributions_stddev_fields']
       | undefined;
     stddev_pop?:
-      | GraphQLTypes['locked_token_distribution_stddev_pop_fields']
+      | GraphQLTypes['locked_token_distributions_stddev_pop_fields']
       | undefined;
     stddev_samp?:
-      | GraphQLTypes['locked_token_distribution_stddev_samp_fields']
+      | GraphQLTypes['locked_token_distributions_stddev_samp_fields']
       | undefined;
-    sum?: GraphQLTypes['locked_token_distribution_sum_fields'] | undefined;
+    sum?: GraphQLTypes['locked_token_distributions_sum_fields'] | undefined;
     var_pop?:
-      | GraphQLTypes['locked_token_distribution_var_pop_fields']
+      | GraphQLTypes['locked_token_distributions_var_pop_fields']
       | undefined;
     var_samp?:
-      | GraphQLTypes['locked_token_distribution_var_samp_fields']
+      | GraphQLTypes['locked_token_distributions_var_samp_fields']
       | undefined;
     variance?:
-      | GraphQLTypes['locked_token_distribution_variance_fields']
+      | GraphQLTypes['locked_token_distributions_variance_fields']
       | undefined;
   };
   /** append existing jsonb value of filtered columns with new jsonb value */
-  ['locked_token_distribution_append_input']: {
+  ['locked_token_distributions_append_input']: {
     distribution_json?: GraphQLTypes['jsonb'] | undefined;
   };
   /** aggregate avg on columns */
-  ['locked_token_distribution_avg_fields']: {
-    __typename: 'locked_token_distribution_avg_fields';
+  ['locked_token_distributions_avg_fields']: {
+    __typename: 'locked_token_distributions_avg_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
-  /** Boolean expression to filter rows from the table "locked_token_distribution". All fields are combined with a logical 'AND'. */
-  ['locked_token_distribution_bool_exp']: {
+  /** Boolean expression to filter rows from the table "locked_token_distributions". All fields are combined with a logical 'AND'. */
+  ['locked_token_distributions_bool_exp']: {
     _and?:
-      | Array<GraphQLTypes['locked_token_distribution_bool_exp']>
+      | Array<GraphQLTypes['locked_token_distributions_bool_exp']>
       | undefined;
-    _not?: GraphQLTypes['locked_token_distribution_bool_exp'] | undefined;
-    _or?: Array<GraphQLTypes['locked_token_distribution_bool_exp']> | undefined;
+    _not?: GraphQLTypes['locked_token_distributions_bool_exp'] | undefined;
+    _or?:
+      | Array<GraphQLTypes['locked_token_distributions_bool_exp']>
+      | undefined;
     created_at?: GraphQLTypes['timestamptz_comparison_exp'] | undefined;
     distribution_json?: GraphQLTypes['jsonb_comparison_exp'] | undefined;
     epoch?: GraphQLTypes['epochs_bool_exp'] | undefined;
@@ -31247,29 +31285,31 @@ export type GraphQLTypes = {
     id?: GraphQLTypes['bigint_comparison_exp'] | undefined;
     tx_hash?: GraphQLTypes['String_comparison_exp'] | undefined;
     updated_at?: GraphQLTypes['timestamptz_comparison_exp'] | undefined;
+    updated_by?: GraphQLTypes['bigint_comparison_exp'] | undefined;
   };
-  /** unique or primary key constraints on table "locked_token_distribution" */
-  ['locked_token_distribution_constraint']: locked_token_distribution_constraint;
+  /** unique or primary key constraints on table "locked_token_distributions" */
+  ['locked_token_distributions_constraint']: locked_token_distributions_constraint;
   /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
-  ['locked_token_distribution_delete_at_path_input']: {
+  ['locked_token_distributions_delete_at_path_input']: {
     distribution_json?: Array<string> | undefined;
   };
   /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
-  ['locked_token_distribution_delete_elem_input']: {
+  ['locked_token_distributions_delete_elem_input']: {
     distribution_json?: number | undefined;
   };
   /** delete key/value pair or string element. key/value pairs are matched based on their key value */
-  ['locked_token_distribution_delete_key_input']: {
+  ['locked_token_distributions_delete_key_input']: {
     distribution_json?: string | undefined;
   };
-  /** input type for incrementing numeric columns in table "locked_token_distribution" */
-  ['locked_token_distribution_inc_input']: {
+  /** input type for incrementing numeric columns in table "locked_token_distributions" */
+  ['locked_token_distributions_inc_input']: {
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
-  /** input type for inserting data into table "locked_token_distribution" */
-  ['locked_token_distribution_insert_input']: {
+  /** input type for inserting data into table "locked_token_distributions" */
+  ['locked_token_distributions_insert_input']: {
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     distribution_json?: GraphQLTypes['jsonb'] | undefined;
     epoch?: GraphQLTypes['epochs_obj_rel_insert_input'] | undefined;
@@ -31278,45 +31318,48 @@ export type GraphQLTypes = {
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
   /** aggregate max on columns */
-  ['locked_token_distribution_max_fields']: {
-    __typename: 'locked_token_distribution_max_fields';
+  ['locked_token_distributions_max_fields']: {
+    __typename: 'locked_token_distributions_max_fields';
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
   /** aggregate min on columns */
-  ['locked_token_distribution_min_fields']: {
-    __typename: 'locked_token_distribution_min_fields';
+  ['locked_token_distributions_min_fields']: {
+    __typename: 'locked_token_distributions_min_fields';
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
-  /** response of any mutation on the table "locked_token_distribution" */
-  ['locked_token_distribution_mutation_response']: {
-    __typename: 'locked_token_distribution_mutation_response';
+  /** response of any mutation on the table "locked_token_distributions" */
+  ['locked_token_distributions_mutation_response']: {
+    __typename: 'locked_token_distributions_mutation_response';
     /** number of rows affected by the mutation */
     affected_rows: number;
     /** data from the rows affected by the mutation */
-    returning: Array<GraphQLTypes['locked_token_distribution']>;
+    returning: Array<GraphQLTypes['locked_token_distributions']>;
   };
-  /** on_conflict condition type for table "locked_token_distribution" */
-  ['locked_token_distribution_on_conflict']: {
-    constraint: GraphQLTypes['locked_token_distribution_constraint'];
+  /** on_conflict condition type for table "locked_token_distributions" */
+  ['locked_token_distributions_on_conflict']: {
+    constraint: GraphQLTypes['locked_token_distributions_constraint'];
     update_columns: Array<
-      GraphQLTypes['locked_token_distribution_update_column']
+      GraphQLTypes['locked_token_distributions_update_column']
     >;
-    where?: GraphQLTypes['locked_token_distribution_bool_exp'] | undefined;
+    where?: GraphQLTypes['locked_token_distributions_bool_exp'] | undefined;
   };
-  /** Ordering options when selecting data from "locked_token_distribution". */
-  ['locked_token_distribution_order_by']: {
+  /** Ordering options when selecting data from "locked_token_distributions". */
+  ['locked_token_distributions_order_by']: {
     created_at?: GraphQLTypes['order_by'] | undefined;
     distribution_json?: GraphQLTypes['order_by'] | undefined;
     epoch?: GraphQLTypes['epochs_order_by'] | undefined;
@@ -31325,19 +31368,20 @@ export type GraphQLTypes = {
     id?: GraphQLTypes['order_by'] | undefined;
     tx_hash?: GraphQLTypes['order_by'] | undefined;
     updated_at?: GraphQLTypes['order_by'] | undefined;
+    updated_by?: GraphQLTypes['order_by'] | undefined;
   };
-  /** primary key columns input for table: locked_token_distribution */
-  ['locked_token_distribution_pk_columns_input']: {
+  /** primary key columns input for table: locked_token_distributions */
+  ['locked_token_distributions_pk_columns_input']: {
     id: GraphQLTypes['bigint'];
   };
   /** prepend existing jsonb value of filtered columns with new jsonb value */
-  ['locked_token_distribution_prepend_input']: {
+  ['locked_token_distributions_prepend_input']: {
     distribution_json?: GraphQLTypes['jsonb'] | undefined;
   };
-  /** select columns of table "locked_token_distribution" */
-  ['locked_token_distribution_select_column']: locked_token_distribution_select_column;
-  /** input type for updating data in table "locked_token_distribution" */
-  ['locked_token_distribution_set_input']: {
+  /** select columns of table "locked_token_distributions" */
+  ['locked_token_distributions_select_column']: locked_token_distributions_select_column;
+  /** input type for updating data in table "locked_token_distributions" */
+  ['locked_token_distributions_set_input']: {
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     distribution_json?: GraphQLTypes['jsonb'] | undefined;
     epoch_id?: GraphQLTypes['bigint'] | undefined;
@@ -31345,37 +31389,41 @@ export type GraphQLTypes = {
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
   /** aggregate stddev on columns */
-  ['locked_token_distribution_stddev_fields']: {
-    __typename: 'locked_token_distribution_stddev_fields';
+  ['locked_token_distributions_stddev_fields']: {
+    __typename: 'locked_token_distributions_stddev_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate stddev_pop on columns */
-  ['locked_token_distribution_stddev_pop_fields']: {
-    __typename: 'locked_token_distribution_stddev_pop_fields';
+  ['locked_token_distributions_stddev_pop_fields']: {
+    __typename: 'locked_token_distributions_stddev_pop_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate stddev_samp on columns */
-  ['locked_token_distribution_stddev_samp_fields']: {
-    __typename: 'locked_token_distribution_stddev_samp_fields';
+  ['locked_token_distributions_stddev_samp_fields']: {
+    __typename: 'locked_token_distributions_stddev_samp_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
-  /** Streaming cursor of the table "locked_token_distribution" */
-  ['locked_token_distribution_stream_cursor_input']: {
+  /** Streaming cursor of the table "locked_token_distributions" */
+  ['locked_token_distributions_stream_cursor_input']: {
     /** Stream column input with initial value */
-    initial_value: GraphQLTypes['locked_token_distribution_stream_cursor_value_input'];
+    initial_value: GraphQLTypes['locked_token_distributions_stream_cursor_value_input'];
     /** cursor ordering */
     ordering?: GraphQLTypes['cursor_ordering'] | undefined;
   };
   /** Initial value of the column from where the streaming should start */
-  ['locked_token_distribution_stream_cursor_value_input']: {
+  ['locked_token_distributions_stream_cursor_value_input']: {
     created_at?: GraphQLTypes['timestamptz'] | undefined;
     distribution_json?: GraphQLTypes['jsonb'] | undefined;
     epoch_id?: GraphQLTypes['bigint'] | undefined;
@@ -31383,63 +31431,68 @@ export type GraphQLTypes = {
     id?: GraphQLTypes['bigint'] | undefined;
     tx_hash?: string | undefined;
     updated_at?: GraphQLTypes['timestamptz'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
   /** aggregate sum on columns */
-  ['locked_token_distribution_sum_fields']: {
-    __typename: 'locked_token_distribution_sum_fields';
+  ['locked_token_distributions_sum_fields']: {
+    __typename: 'locked_token_distributions_sum_fields';
     epoch_id?: GraphQLTypes['bigint'] | undefined;
     gift_amount?: GraphQLTypes['numeric'] | undefined;
     id?: GraphQLTypes['bigint'] | undefined;
+    updated_by?: GraphQLTypes['bigint'] | undefined;
   };
-  /** update columns of table "locked_token_distribution" */
-  ['locked_token_distribution_update_column']: locked_token_distribution_update_column;
-  ['locked_token_distribution_updates']: {
+  /** update columns of table "locked_token_distributions" */
+  ['locked_token_distributions_update_column']: locked_token_distributions_update_column;
+  ['locked_token_distributions_updates']: {
     /** append existing jsonb value of filtered columns with new jsonb value */
     _append?:
-      | GraphQLTypes['locked_token_distribution_append_input']
+      | GraphQLTypes['locked_token_distributions_append_input']
       | undefined;
     /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
     _delete_at_path?:
-      | GraphQLTypes['locked_token_distribution_delete_at_path_input']
+      | GraphQLTypes['locked_token_distributions_delete_at_path_input']
       | undefined;
     /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
     _delete_elem?:
-      | GraphQLTypes['locked_token_distribution_delete_elem_input']
+      | GraphQLTypes['locked_token_distributions_delete_elem_input']
       | undefined;
     /** delete key/value pair or string element. key/value pairs are matched based on their key value */
     _delete_key?:
-      | GraphQLTypes['locked_token_distribution_delete_key_input']
+      | GraphQLTypes['locked_token_distributions_delete_key_input']
       | undefined;
     /** increments the numeric columns with given value of the filtered values */
-    _inc?: GraphQLTypes['locked_token_distribution_inc_input'] | undefined;
+    _inc?: GraphQLTypes['locked_token_distributions_inc_input'] | undefined;
     /** prepend existing jsonb value of filtered columns with new jsonb value */
     _prepend?:
-      | GraphQLTypes['locked_token_distribution_prepend_input']
+      | GraphQLTypes['locked_token_distributions_prepend_input']
       | undefined;
     /** sets the columns of the filtered rows to the given values */
-    _set?: GraphQLTypes['locked_token_distribution_set_input'] | undefined;
-    where: GraphQLTypes['locked_token_distribution_bool_exp'];
+    _set?: GraphQLTypes['locked_token_distributions_set_input'] | undefined;
+    where: GraphQLTypes['locked_token_distributions_bool_exp'];
   };
   /** aggregate var_pop on columns */
-  ['locked_token_distribution_var_pop_fields']: {
-    __typename: 'locked_token_distribution_var_pop_fields';
+  ['locked_token_distributions_var_pop_fields']: {
+    __typename: 'locked_token_distributions_var_pop_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate var_samp on columns */
-  ['locked_token_distribution_var_samp_fields']: {
-    __typename: 'locked_token_distribution_var_samp_fields';
+  ['locked_token_distributions_var_samp_fields']: {
+    __typename: 'locked_token_distributions_var_samp_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** aggregate variance on columns */
-  ['locked_token_distribution_variance_fields']: {
-    __typename: 'locked_token_distribution_variance_fields';
+  ['locked_token_distributions_variance_fields']: {
+    __typename: 'locked_token_distributions_variance_fields';
     epoch_id?: number | undefined;
     gift_amount?: number | undefined;
     id?: number | undefined;
+    updated_by?: number | undefined;
   };
   /** mutation root */
   ['mutation_root']: {
@@ -31550,13 +31603,13 @@ export type GraphQLTypes = {
     delete_interaction_events_by_pk?:
       | GraphQLTypes['interaction_events']
       | undefined;
-    /** delete data from the table: "locked_token_distribution" */
-    delete_locked_token_distribution?:
-      | GraphQLTypes['locked_token_distribution_mutation_response']
+    /** delete data from the table: "locked_token_distributions" */
+    delete_locked_token_distributions?:
+      | GraphQLTypes['locked_token_distributions_mutation_response']
       | undefined;
-    /** delete single row from the table: "locked_token_distribution" */
-    delete_locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** delete single row from the table: "locked_token_distributions" */
+    delete_locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
     /** delete data from the table: "nominees" */
     delete_nominees?: GraphQLTypes['nominees_mutation_response'] | undefined;
@@ -31732,13 +31785,13 @@ export type GraphQLTypes = {
     insert_interaction_events_one?:
       | GraphQLTypes['interaction_events']
       | undefined;
-    /** insert data into the table: "locked_token_distribution" */
-    insert_locked_token_distribution?:
-      | GraphQLTypes['locked_token_distribution_mutation_response']
+    /** insert data into the table: "locked_token_distributions" */
+    insert_locked_token_distributions?:
+      | GraphQLTypes['locked_token_distributions_mutation_response']
       | undefined;
-    /** insert a single row into the table: "locked_token_distribution" */
-    insert_locked_token_distribution_one?:
-      | GraphQLTypes['locked_token_distribution']
+    /** insert a single row into the table: "locked_token_distributions" */
+    insert_locked_token_distributions_one?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
     /** insert data into the table: "nominees" */
     insert_nominees?: GraphQLTypes['nominees_mutation_response'] | undefined;
@@ -31991,18 +32044,18 @@ export type GraphQLTypes = {
     update_interaction_events_many?:
       | Array<GraphQLTypes['interaction_events_mutation_response'] | undefined>
       | undefined;
-    /** update data of the table: "locked_token_distribution" */
-    update_locked_token_distribution?:
-      | GraphQLTypes['locked_token_distribution_mutation_response']
+    /** update data of the table: "locked_token_distributions" */
+    update_locked_token_distributions?:
+      | GraphQLTypes['locked_token_distributions_mutation_response']
       | undefined;
-    /** update single row of the table: "locked_token_distribution" */
-    update_locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** update single row of the table: "locked_token_distributions" */
+    update_locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
-    /** update multiples rows of table: "locked_token_distribution" */
-    update_locked_token_distribution_many?:
+    /** update multiples rows of table: "locked_token_distributions" */
+    update_locked_token_distributions_many?:
       | Array<
-          | GraphQLTypes['locked_token_distribution_mutation_response']
+          | GraphQLTypes['locked_token_distributions_mutation_response']
           | undefined
         >
       | undefined;
@@ -34368,13 +34421,15 @@ export type GraphQLTypes = {
     interaction_events_aggregate: GraphQLTypes['interaction_events_aggregate'];
     /** fetch data from the table: "interaction_events" using primary key columns */
     interaction_events_by_pk?: GraphQLTypes['interaction_events'] | undefined;
-    /** fetch data from the table: "locked_token_distribution" */
-    locked_token_distribution: Array<GraphQLTypes['locked_token_distribution']>;
-    /** fetch aggregated fields from the table: "locked_token_distribution" */
-    locked_token_distribution_aggregate: GraphQLTypes['locked_token_distribution_aggregate'];
-    /** fetch data from the table: "locked_token_distribution" using primary key columns */
-    locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** fetch data from the table: "locked_token_distributions" */
+    locked_token_distributions: Array<
+      GraphQLTypes['locked_token_distributions']
+    >;
+    /** fetch aggregated fields from the table: "locked_token_distributions" */
+    locked_token_distributions_aggregate: GraphQLTypes['locked_token_distributions_aggregate'];
+    /** fetch data from the table: "locked_token_distributions" using primary key columns */
+    locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
     /** An array relationship */
     nominees: Array<GraphQLTypes['nominees']>;
@@ -34416,7 +34471,6 @@ export type GraphQLTypes = {
     personal_access_tokens_by_pk?:
       | GraphQLTypes['personal_access_tokens']
       | undefined;
-    price_per_share: number;
     /** fetch data from the table: "profiles" */
     profiles: Array<GraphQLTypes['profiles']>;
     /** fetch aggregated fields from the table: "profiles" */
@@ -34598,17 +34652,19 @@ export type GraphQLTypes = {
     interaction_events_by_pk?: GraphQLTypes['interaction_events'] | undefined;
     /** fetch data from the table in a streaming manner : "interaction_events" */
     interaction_events_stream: Array<GraphQLTypes['interaction_events']>;
-    /** fetch data from the table: "locked_token_distribution" */
-    locked_token_distribution: Array<GraphQLTypes['locked_token_distribution']>;
-    /** fetch aggregated fields from the table: "locked_token_distribution" */
-    locked_token_distribution_aggregate: GraphQLTypes['locked_token_distribution_aggregate'];
-    /** fetch data from the table: "locked_token_distribution" using primary key columns */
-    locked_token_distribution_by_pk?:
-      | GraphQLTypes['locked_token_distribution']
+    /** fetch data from the table: "locked_token_distributions" */
+    locked_token_distributions: Array<
+      GraphQLTypes['locked_token_distributions']
+    >;
+    /** fetch aggregated fields from the table: "locked_token_distributions" */
+    locked_token_distributions_aggregate: GraphQLTypes['locked_token_distributions_aggregate'];
+    /** fetch data from the table: "locked_token_distributions" using primary key columns */
+    locked_token_distributions_by_pk?:
+      | GraphQLTypes['locked_token_distributions']
       | undefined;
-    /** fetch data from the table in a streaming manner : "locked_token_distribution" */
-    locked_token_distribution_stream: Array<
-      GraphQLTypes['locked_token_distribution']
+    /** fetch data from the table in a streaming manner : "locked_token_distributions" */
+    locked_token_distributions_stream: Array<
+      GraphQLTypes['locked_token_distributions']
     >;
     /** An array relationship */
     nominees: Array<GraphQLTypes['nominees']>;
@@ -36733,7 +36789,6 @@ export type GraphQLTypes = {
     org_id: GraphQLTypes['bigint'];
     /** An object relationship */
     organization: GraphQLTypes['organizations'];
-    price_per_share: number;
     /** An object relationship */
     profile: GraphQLTypes['profiles'];
     simple_token_address: string;
@@ -37891,12 +37946,12 @@ export const enum interaction_events_update_column {
   profile_id = 'profile_id',
   updated_at = 'updated_at',
 }
-/** unique or primary key constraints on table "locked_token_distribution" */
-export const enum locked_token_distribution_constraint {
+/** unique or primary key constraints on table "locked_token_distributions" */
+export const enum locked_token_distributions_constraint {
   locked_token_distribution_pkey = 'locked_token_distribution_pkey',
 }
-/** select columns of table "locked_token_distribution" */
-export const enum locked_token_distribution_select_column {
+/** select columns of table "locked_token_distributions" */
+export const enum locked_token_distributions_select_column {
   created_at = 'created_at',
   distribution_json = 'distribution_json',
   epoch_id = 'epoch_id',
@@ -37904,9 +37959,10 @@ export const enum locked_token_distribution_select_column {
   id = 'id',
   tx_hash = 'tx_hash',
   updated_at = 'updated_at',
+  updated_by = 'updated_by',
 }
-/** update columns of table "locked_token_distribution" */
-export const enum locked_token_distribution_update_column {
+/** update columns of table "locked_token_distributions" */
+export const enum locked_token_distributions_update_column {
   created_at = 'created_at',
   distribution_json = 'distribution_json',
   epoch_id = 'epoch_id',
@@ -37914,6 +37970,7 @@ export const enum locked_token_distribution_update_column {
   id = 'id',
   tx_hash = 'tx_hash',
   updated_at = 'updated_at',
+  updated_by = 'updated_by',
 }
 /** unique or primary key constraints on table "nominees" */
 export const enum nominees_constraint {

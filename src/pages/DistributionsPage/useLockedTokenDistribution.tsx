@@ -50,6 +50,7 @@ export const useLockedTokenDistribution = () => {
       epoch_id: epochId,
       gift_amount: amount,
       distribution_json: balances,
+      updated_by: 255,
     });
 
     assert(response, 'Locked distribution was not saved.');

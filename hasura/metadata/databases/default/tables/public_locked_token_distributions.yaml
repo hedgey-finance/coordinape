@@ -19,6 +19,7 @@ insert_permissions:
         - distribution_json
         - epoch_id
         - gift_amount
+        - updated_by
 select_permissions:
   - role: user
     permission:
@@ -28,6 +29,7 @@ select_permissions:
         - gift_amount
         - id
         - tx_hash
+        - updated_by
       filter:
         epoch:
           circle:

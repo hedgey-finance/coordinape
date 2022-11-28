@@ -34,31 +34,28 @@ export function useSaveDistribution() {
 }
 
 export function useSaveLockedTokenDistribution() {
-  return useMutation(
-    async (
-      distribution: ValueTypes['locked_token_distribution_insert_input']
-    ) => {
-      const { insert_locked_token_distribution_one } = await client.mutate({
-        insert_locked_token_distribution_one: [
-          {
-            object: {
-              epoch_id: distribution.epoch_id,
-              gift_amount: distribution.gift_amount,
-              distribution_json: distribution.distribution_json,
-            },
+  return useMutation(async (distribution: any) => {
+    const { insert_locked_token_distributions_one } = await client.mutate({
+      insert_locked_token_distributions_one: [
+        {
+          object: {
+            epoch_id: distribution.epoch_id,
+            gift_amount: distribution.gift_amount,
+            distribution_json: distribution.distribution_json,
+            updated_by: distribution.updated_by,
           },
-          { id: true },
-        ],
-      });
-      return insert_locked_token_distribution_one;
-    }
-  );
+        },
+        { id: true },
+      ],
+    });
+    return insert_locked_token_distributions_one;
+  });
 }
 
 export function useMarkLockedDistributionDone() {
   return useMutation(({ id, tx_hash }: { id: number; tx_hash: string }) => {
     return client.mutate({
-      update_locked_token_distribution_by_pk: [
+      update_locked_token_distributions_by_pk: [
         {
           _set: { tx_hash },
           pk_columns: { id },
