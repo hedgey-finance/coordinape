@@ -23,6 +23,10 @@ type Mutation {
 }
 
 type Mutation {
+  createUser(payload: CreateUserInput!): UserResponse
+}
+
+type Mutation {
   createUserWithToken(payload: CreateUserWithTokenInput!): UserResponse
 }
 

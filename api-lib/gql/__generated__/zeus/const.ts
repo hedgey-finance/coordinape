@@ -26,6 +26,7 @@ export const AllTypesProps: Record<string, any> = {
     start_date: 'timestamptz',
   },
   CreateNomineeInput: {},
+  CreateUserInput: {},
   CreateUserWithTokenInput: {},
   CreateUsersInput: {
     users: 'UserObj',
@@ -2534,6 +2535,93 @@ export const AllTypesProps: Record<string, any> = {
     _neq: 'jsonb',
     _nin: 'jsonb',
   },
+  locked_token_distributions: {
+    distribution_json: {},
+  },
+  locked_token_distributions_aggregate_fields: {
+    count: {
+      columns: 'locked_token_distributions_select_column',
+    },
+  },
+  locked_token_distributions_append_input: {
+    distribution_json: 'jsonb',
+  },
+  locked_token_distributions_bool_exp: {
+    _and: 'locked_token_distributions_bool_exp',
+    _not: 'locked_token_distributions_bool_exp',
+    _or: 'locked_token_distributions_bool_exp',
+    distributed_by: 'String_comparison_exp',
+    distribution_json: 'jsonb_comparison_exp',
+    epoch: 'epochs_bool_exp',
+    epoch_id: 'bigint_comparison_exp',
+    gift_amount: 'numeric_comparison_exp',
+    id: 'bigint_comparison_exp',
+    tx_hash: 'String_comparison_exp',
+  },
+  locked_token_distributions_constraint: true,
+  locked_token_distributions_delete_at_path_input: {},
+  locked_token_distributions_delete_elem_input: {},
+  locked_token_distributions_delete_key_input: {},
+  locked_token_distributions_inc_input: {
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distributions_insert_input: {
+    distribution_json: 'jsonb',
+    epoch: 'epochs_obj_rel_insert_input',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distributions_on_conflict: {
+    constraint: 'locked_token_distributions_constraint',
+    update_columns: 'locked_token_distributions_update_column',
+    where: 'locked_token_distributions_bool_exp',
+  },
+  locked_token_distributions_order_by: {
+    distributed_by: 'order_by',
+    distribution_json: 'order_by',
+    epoch: 'epochs_order_by',
+    epoch_id: 'order_by',
+    gift_amount: 'order_by',
+    id: 'order_by',
+    tx_hash: 'order_by',
+  },
+  locked_token_distributions_pk_columns_input: {
+    id: 'bigint',
+  },
+  locked_token_distributions_prepend_input: {
+    distribution_json: 'jsonb',
+  },
+  locked_token_distributions_select_column: true,
+  locked_token_distributions_set_input: {
+    distribution_json: 'jsonb',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distributions_stream_cursor_input: {
+    initial_value: 'locked_token_distributions_stream_cursor_value_input',
+    ordering: 'cursor_ordering',
+  },
+  locked_token_distributions_stream_cursor_value_input: {
+    distribution_json: 'jsonb',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distributions_update_column: true,
+  locked_token_distributions_updates: {
+    _append: 'locked_token_distributions_append_input',
+    _delete_at_path: 'locked_token_distributions_delete_at_path_input',
+    _delete_elem: 'locked_token_distributions_delete_elem_input',
+    _delete_key: 'locked_token_distributions_delete_key_input',
+    _inc: 'locked_token_distributions_inc_input',
+    _prepend: 'locked_token_distributions_prepend_input',
+    _set: 'locked_token_distributions_set_input',
+    where: 'locked_token_distributions_bool_exp',
+  },
   mutation_root: {
     adminUpdateUser: {
       payload: 'AdminUpdateUserInput',
@@ -2549,6 +2637,9 @@ export const AllTypesProps: Record<string, any> = {
     },
     createNominee: {
       payload: 'CreateNomineeInput',
+    },
+    createUser: {
+      payload: 'CreateUserInput',
     },
     createUserWithToken: {
       payload: 'CreateUserWithTokenInput',
@@ -2660,6 +2751,12 @@ export const AllTypesProps: Record<string, any> = {
       where: 'interaction_events_bool_exp',
     },
     delete_interaction_events_by_pk: {},
+    delete_locked_token_distributions: {
+      where: 'locked_token_distributions_bool_exp',
+    },
+    delete_locked_token_distributions_by_pk: {
+      id: 'bigint',
+    },
     delete_nominees: {
       where: 'nominees_bool_exp',
     },
@@ -2863,6 +2960,14 @@ export const AllTypesProps: Record<string, any> = {
     insert_interaction_events_one: {
       object: 'interaction_events_insert_input',
       on_conflict: 'interaction_events_on_conflict',
+    },
+    insert_locked_token_distributions: {
+      objects: 'locked_token_distributions_insert_input',
+      on_conflict: 'locked_token_distributions_on_conflict',
+    },
+    insert_locked_token_distributions_one: {
+      object: 'locked_token_distributions_insert_input',
+      on_conflict: 'locked_token_distributions_on_conflict',
     },
     insert_nominees: {
       objects: 'nominees_insert_input',
@@ -3218,6 +3323,29 @@ export const AllTypesProps: Record<string, any> = {
     },
     update_interaction_events_many: {
       updates: 'interaction_events_updates',
+    },
+    update_locked_token_distributions: {
+      _append: 'locked_token_distributions_append_input',
+      _delete_at_path: 'locked_token_distributions_delete_at_path_input',
+      _delete_elem: 'locked_token_distributions_delete_elem_input',
+      _delete_key: 'locked_token_distributions_delete_key_input',
+      _inc: 'locked_token_distributions_inc_input',
+      _prepend: 'locked_token_distributions_prepend_input',
+      _set: 'locked_token_distributions_set_input',
+      where: 'locked_token_distributions_bool_exp',
+    },
+    update_locked_token_distributions_by_pk: {
+      _append: 'locked_token_distributions_append_input',
+      _delete_at_path: 'locked_token_distributions_delete_at_path_input',
+      _delete_elem: 'locked_token_distributions_delete_elem_input',
+      _delete_key: 'locked_token_distributions_delete_key_input',
+      _inc: 'locked_token_distributions_inc_input',
+      _prepend: 'locked_token_distributions_prepend_input',
+      _set: 'locked_token_distributions_set_input',
+      pk_columns: 'locked_token_distributions_pk_columns_input',
+    },
+    update_locked_token_distributions_many: {
+      updates: 'locked_token_distributions_updates',
     },
     update_nominees: {
       _inc: 'nominees_inc_input',
@@ -4528,6 +4656,19 @@ export const AllTypesProps: Record<string, any> = {
       where: 'interaction_events_bool_exp',
     },
     interaction_events_by_pk: {},
+    locked_token_distributions: {
+      distinct_on: 'locked_token_distributions_select_column',
+      order_by: 'locked_token_distributions_order_by',
+      where: 'locked_token_distributions_bool_exp',
+    },
+    locked_token_distributions_aggregate: {
+      distinct_on: 'locked_token_distributions_select_column',
+      order_by: 'locked_token_distributions_order_by',
+      where: 'locked_token_distributions_bool_exp',
+    },
+    locked_token_distributions_by_pk: {
+      id: 'bigint',
+    },
     nominees: {
       distinct_on: 'nominees_select_column',
       order_by: 'nominees_order_by',
@@ -4601,7 +4742,6 @@ export const AllTypesProps: Record<string, any> = {
     personal_access_tokens_by_pk: {
       id: 'bigint',
     },
-    price_per_share: {},
     profiles: {
       distinct_on: 'profiles_select_column',
       order_by: 'profiles_order_by',
@@ -4977,6 +5117,23 @@ export const AllTypesProps: Record<string, any> = {
     interaction_events_stream: {
       cursor: 'interaction_events_stream_cursor_input',
       where: 'interaction_events_bool_exp',
+    },
+    locked_token_distributions: {
+      distinct_on: 'locked_token_distributions_select_column',
+      order_by: 'locked_token_distributions_order_by',
+      where: 'locked_token_distributions_bool_exp',
+    },
+    locked_token_distributions_aggregate: {
+      distinct_on: 'locked_token_distributions_select_column',
+      order_by: 'locked_token_distributions_order_by',
+      where: 'locked_token_distributions_bool_exp',
+    },
+    locked_token_distributions_by_pk: {
+      id: 'bigint',
+    },
+    locked_token_distributions_stream: {
+      cursor: 'locked_token_distributions_stream_cursor_input',
+      where: 'locked_token_distributions_bool_exp',
     },
     nominees: {
       distinct_on: 'nominees_select_column',
@@ -8367,6 +8524,90 @@ export const ReturnTypes: Record<string, any> = {
     org_id: 'Float',
     profile_id: 'Float',
   },
+  locked_token_distributions: {
+    distributed_by: 'String',
+    distribution_json: 'jsonb',
+    epoch: 'epochs',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+    tx_hash: 'String',
+  },
+  locked_token_distributions_aggregate: {
+    aggregate: 'locked_token_distributions_aggregate_fields',
+    nodes: 'locked_token_distributions',
+  },
+  locked_token_distributions_aggregate_fields: {
+    avg: 'locked_token_distributions_avg_fields',
+    count: 'Int',
+    max: 'locked_token_distributions_max_fields',
+    min: 'locked_token_distributions_min_fields',
+    stddev: 'locked_token_distributions_stddev_fields',
+    stddev_pop: 'locked_token_distributions_stddev_pop_fields',
+    stddev_samp: 'locked_token_distributions_stddev_samp_fields',
+    sum: 'locked_token_distributions_sum_fields',
+    var_pop: 'locked_token_distributions_var_pop_fields',
+    var_samp: 'locked_token_distributions_var_samp_fields',
+    variance: 'locked_token_distributions_variance_fields',
+  },
+  locked_token_distributions_avg_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distributions_max_fields: {
+    distributed_by: 'String',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+    tx_hash: 'String',
+  },
+  locked_token_distributions_min_fields: {
+    distributed_by: 'String',
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+    tx_hash: 'String',
+  },
+  locked_token_distributions_mutation_response: {
+    affected_rows: 'Int',
+    returning: 'locked_token_distributions',
+  },
+  locked_token_distributions_stddev_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distributions_stddev_pop_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distributions_stddev_samp_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distributions_sum_fields: {
+    epoch_id: 'bigint',
+    gift_amount: 'numeric',
+    id: 'bigint',
+  },
+  locked_token_distributions_var_pop_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distributions_var_samp_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
+  locked_token_distributions_variance_fields: {
+    epoch_id: 'Float',
+    gift_amount: 'Float',
+    id: 'Float',
+  },
   mutation_root: {
     adminUpdateUser: 'UserResponse',
     allocationCsv: 'AllocationCsvResponse',
@@ -8374,6 +8615,7 @@ export const ReturnTypes: Record<string, any> = {
     createEpoch: 'EpochResponse',
     createNominee: 'CreateNomineeResponse',
     createSampleCircle: 'CreateSampleCircleResponse',
+    createUser: 'UserResponse',
     createUserWithToken: 'UserResponse',
     createUsers: 'UserResponse',
     createVault: 'VaultResponse',
@@ -8412,6 +8654,9 @@ export const ReturnTypes: Record<string, any> = {
     delete_histories_by_pk: 'histories',
     delete_interaction_events: 'interaction_events_mutation_response',
     delete_interaction_events_by_pk: 'interaction_events',
+    delete_locked_token_distributions:
+      'locked_token_distributions_mutation_response',
+    delete_locked_token_distributions_by_pk: 'locked_token_distributions',
     delete_nominees: 'nominees_mutation_response',
     delete_nominees_by_pk: 'nominees',
     delete_organizations: 'organizations_mutation_response',
@@ -8473,6 +8718,9 @@ export const ReturnTypes: Record<string, any> = {
     insert_histories_one: 'histories',
     insert_interaction_events: 'interaction_events_mutation_response',
     insert_interaction_events_one: 'interaction_events',
+    insert_locked_token_distributions:
+      'locked_token_distributions_mutation_response',
+    insert_locked_token_distributions_one: 'locked_token_distributions',
     insert_nominees: 'nominees_mutation_response',
     insert_nominees_one: 'nominees',
     insert_organizations: 'organizations_mutation_response',
@@ -8559,6 +8807,11 @@ export const ReturnTypes: Record<string, any> = {
     update_interaction_events: 'interaction_events_mutation_response',
     update_interaction_events_by_pk: 'interaction_events',
     update_interaction_events_many: 'interaction_events_mutation_response',
+    update_locked_token_distributions:
+      'locked_token_distributions_mutation_response',
+    update_locked_token_distributions_by_pk: 'locked_token_distributions',
+    update_locked_token_distributions_many:
+      'locked_token_distributions_mutation_response',
     update_nominees: 'nominees_mutation_response',
     update_nominees_by_pk: 'nominees',
     update_nominees_many: 'nominees_mutation_response',
@@ -9387,6 +9640,10 @@ export const ReturnTypes: Record<string, any> = {
     interaction_events: 'interaction_events',
     interaction_events_aggregate: 'interaction_events_aggregate',
     interaction_events_by_pk: 'interaction_events',
+    locked_token_distributions: 'locked_token_distributions',
+    locked_token_distributions_aggregate:
+      'locked_token_distributions_aggregate',
+    locked_token_distributions_by_pk: 'locked_token_distributions',
     nominees: 'nominees',
     nominees_aggregate: 'nominees_aggregate',
     nominees_by_pk: 'nominees',
@@ -9405,7 +9662,6 @@ export const ReturnTypes: Record<string, any> = {
     personal_access_tokens: 'personal_access_tokens',
     personal_access_tokens_aggregate: 'personal_access_tokens_aggregate',
     personal_access_tokens_by_pk: 'personal_access_tokens',
-    price_per_share: 'Float',
     profiles: 'profiles',
     profiles_aggregate: 'profiles_aggregate',
     profiles_by_pk: 'profiles',
@@ -9496,6 +9752,11 @@ export const ReturnTypes: Record<string, any> = {
     interaction_events_aggregate: 'interaction_events_aggregate',
     interaction_events_by_pk: 'interaction_events',
     interaction_events_stream: 'interaction_events',
+    locked_token_distributions: 'locked_token_distributions',
+    locked_token_distributions_aggregate:
+      'locked_token_distributions_aggregate',
+    locked_token_distributions_by_pk: 'locked_token_distributions',
+    locked_token_distributions_stream: 'locked_token_distributions',
     nominees: 'nominees',
     nominees_aggregate: 'nominees_aggregate',
     nominees_by_pk: 'nominees',
@@ -10166,7 +10427,6 @@ export const ReturnTypes: Record<string, any> = {
     id: 'bigint',
     org_id: 'bigint',
     organization: 'organizations',
-    price_per_share: 'Float',
     profile: 'profiles',
     simple_token_address: 'String',
     symbol: 'String',
