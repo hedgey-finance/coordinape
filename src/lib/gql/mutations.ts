@@ -141,6 +141,20 @@ export const createCircleIntegration = async (
   );
 };
 
+export const updateCircleIntegration = async (id: number, data: any) => {
+  return client.mutate({
+    update_circle_integrations_by_pk: [
+      {
+        pk_columns: { id },
+        _set: { data },
+      },
+      {
+        id: true,
+      },
+    ],
+  });
+};
+
 export const deleteCircleIntegration = async (id: number) =>
   client.mutate(
     {
